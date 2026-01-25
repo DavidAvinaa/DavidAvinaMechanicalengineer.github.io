@@ -2,7 +2,8 @@
 I am David Aviña, a Mechanical Engineer with experience in project management and engineering design. I have worked on structural and energy-related projects, focused on efficiency, quality, safety, and technical problem solving, with a strong interest in continuous improvement, teamwork, and delivering reliable engineering solutions worldwide.
 ## Project Management Experience
 
-I have led multiple engineering projects as a **Project Manager**, overseeing each phase from initial planning to final delivery. In addition to project coordination and technical decision-making, I am also responsible for the **engineering design** and preparation of fabrication drawings, using software such as SolidWorks, AutoCAD, and CATIA, ensuring accurate dimensions, manufacturability, and compliance with quality, safety, and schedule requirements.
+I have led multiple engineering projects as a **Project Manager**, overseeing each phase from initial planning to final delivery. In addition to project coordination and technical decision-making, I am also responsible for **Engineering Design** and the development of fabrication drawings using software such as SolidWorks, AutoCAD, and CATIA, validating accurate dimensions for proper manufacturing while ensuring quality, safety, and schedule compliance.
+
 ---
 
 ### 📌 Project Planning & Scope Definition
