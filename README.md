@@ -1,136 +1,77 @@
-# David Aviña Mechanical Engineer
-I am David Aviña, a Mechanical Engineer with experience in project management and engineering design. I have worked on structural and energy-related projects, focused on efficiency, quality, safety, and technical problem solving, with a strong interest in continuous improvement, teamwork, and delivering reliable engineering solutions worldwide.
-## Project Management Experience
-
-I have led multiple engineering projects as a **Project Manager**, overseeing each phase from initial planning to final delivery. In addition to project coordination and technical decision-making, I am also responsible for **Engineering Design** and the development of fabrication drawings using software such as SolidWorks, AutoCAD, and CATIA, validating accurate dimensions for proper manufacturing while ensuring quality, safety, and schedule compliance.
-
----
-
-### 📌 Project Planning & Scope Definition
-![Project Planning](images/planning.jpg)
-
-- Defined project scope, objectives, and deliverables  
-- Created schedules, budgets, and risk assessments  
-- Coordinated with stakeholders and engineering teams  
-
----
-
-### 📐 Design & Engineering Phase
-![Design Phase](images/design.jpg)
-
-- Supervised structural and mechanical design development  
-- Reviewed technical drawings and calculations  
-- Ensured compliance with engineering standards and client requirements  
-
----
-
-### 🏗️ Execution & Construction
-![Execution](images/execution.jpg)
-
-- Managed on-site activities and contractor coordination  
-- Monitored progress, quality, and safety  
-- Solved technical issues during construction  
-
----
-
-### ✅ Project Closure & Delivery
-![Delivery](images/delivery.jpg)
-
-- Verified final deliverables and documentation  
-- Ensured client satisfaction and handover  
-- Evaluated lessons learned for continuous improvement
-
-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>CORE-LOC 3D Viewer</title>
+  <title>David Aviña | Mechanical Engineer</title>
+
   <style>
     body {
       margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
       background: #f4f6f8;
-      overflow: hidden;
+      color: #1f2933;
     }
+
+    header {
+      padding: 40px 60px 20px 60px;
+      background: #ffffff;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 36px;
+      color: #1e3799;
+    }
+
+    h2 {
+      margin-top: 40px;
+      color: #1e3799;
+    }
+
+    p {
+      max-width: 900px;
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    .viewer {
+      width: 100%;
+      height: 600px;
+      background: #f4f6f8;
+    }
+
     canvas {
       display: block;
     }
+
+    footer {
+      padding: 20px 60px;
+      font-size: 14px;
+      color: #6b7280;
+      background: #ffffff;
+    }
   </style>
 </head>
+
 <body>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/controls/OrbitControls.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/loaders/STLLoader.js"></script>
+<header>
+  <h1>David Aviña Mechanical Engineer</h1>
 
-<script>
-  // Scene
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xf4f6f8);
+  <p>
+    I am David Aviña, a Mechanical Engineer with experience in project management
+    and engineering design. I have worked on structural and energy-related projects,
+    focused on efficiency, quality, safety, and technical problem solving, with a
+    strong interest in continuous improvement, teamwork, and delivering reliable
+    engineering solutions worldwide.
+  </p>
 
-  // Camera
-  const camera = new THREE.PerspectiveCamera(
-    60,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-  );
-  camera.position.set(0, 40, 100);
+  <h2>Project Management Experience</h2>
 
-  // Renderer
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
+  <p>
+    I have led multiple engineering projects as a <strong>Project Manager</strong>,
+    overseeing each phase from initial planning to final delivery. In addition to
+    project coordination and technical decision-making, I am also responsible for
+    <strong>Engineering Design</strong> an
 
-  // Controls
-  const controls = new THREE.OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-
-  // Lights
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-  directionalLight.position.set(50, 50, 50);
-  scene.add(directionalLight);
-
-  const ambientLight = new THREE.AmbientLight(0x404040, 1.2);
-  scene.add(ambientLight);
-
-  // Load STL
-  const loader = new THREE.STLLoader();
-  loader.load(
-    'models/CORE-LOC.stl',
-    function (geometry) {
-      geometry.center();
-
-      const material = new THREE.MeshStandardMaterial({
-        color: 0x1e3799,
-        metalness: 0.35,
-        roughness: 0.45
-      });
-
-      const mesh = new THREE.Mesh(geometry, material);
-      scene.add(mesh);
-    },
-    undefined,
-    function (error) {
-      console.error('Error loading STL:', error);
-    }
-  );
-
-  // Resize
-  window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  });
-
-  // Animate
-  function animate() {
-    requestAnimationFrame(animate);
-    controls.update();
-    renderer.render(scene, camera);
-  }
-  animate();
-</script>
-
-</body>
-</html>
 
