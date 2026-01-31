@@ -2,25 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>David Aviña | Mechanical Engineer</title>
-
+  <title>David Aviña – Mechanical Engineer</title>
   <style>
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
       background: #f4f6f8;
-      color: #1e272e;
+      color: #1f2937;
     }
 
-    header {
-      padding: 40px;
+    .container {
       max-width: 1100px;
-      margin: auto;
+      margin: 40px auto;
+      padding: 0 20px;
     }
 
     h1 {
       color: #1e3799;
-      margin-bottom: 10px;
     }
 
     h2 {
@@ -28,49 +26,40 @@
       margin-top: 40px;
     }
 
-    p {
-      line-height: 1.6;
-      max-width: 900px;
-    }
-
     #viewer {
       width: 100%;
-      height: 600px;
-      background: #f4f6f8;
-    }
-
-    canvas {
-      display: block;
+      height: 500px;
+      margin-top: 40px;
+      border-radius: 12px;
+      background: #eaeef3;
     }
   </style>
 </head>
-
 <body>
 
-<header>
+<div class="container">
   <h1>David Aviña Mechanical Engineer</h1>
 
   <p>
     I am David Aviña, a Mechanical Engineer with experience in project management and engineering design.
-    I have worked on structural and energy-related projects, focused on efficiency, quality, safety,
-    and technical problem solving, with a strong interest in continuous improvement, teamwork,
-    and delivering reliable engineering solutions worldwide.
+    I have worked on structural and energy-related projects, focused on efficiency, quality, safety, and
+    technical problem solving, with a strong interest in continuous improvement, teamwork, and delivering
+    reliable engineering solutions worldwide.
   </p>
 
   <h2>Project Management Experience</h2>
 
   <p>
-    I have led multiple engineering projects as a <strong>Project Manager</strong>, overseeing each
-    phase from initial planning to final delivery. In addition to project coordination and technical
-    decision-making, I am also responsible for <strong>Engineering Design</strong> and the development
-    of fabrication drawings using software such as SolidWorks, AutoCAD, and CATIA, validating accurate
-    dimensions for proper manufacturing while ensuring quality, safety, and schedule compliance.
+    I have led multiple engineering projects as a <strong>Project Manager</strong>, overseeing each phase
+    from initial planning to final delivery. In addition to project coordination and technical decision-making,
+    I am also responsible for <strong>Engineering Design</strong> and the development of fabrication drawings
+    using software such as SolidWorks, AutoCAD, and CATIA, validating accurate dimensions for proper manufacturing
+    while ensuring quality, safety, and schedule compliance.
   </p>
-</header>
 
-<div id="viewer"></div>
+  <div id="viewer"></div>
+</div>
 
-<!-- THREE.JS -->
 <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/controls/OrbitControls.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/loaders/STLLoader.js"></script>
@@ -79,53 +68,40 @@
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0xf4f6f8);
 
-  const camera = new THREE.PerspectiveCamera(
-    60,
-    window.innerWidth / 600,
-    0.1,
-    1000
-  );
-  camera.position.set(0, 40, 120);
+  const camera = new THREE.PerspectiveCamera(45, window.innerWidth / 500, 0.1, 2000);
+  camera.position.set(100, 100, 100);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(window.innerWidth, 600);
+  renderer.setSize(document.getElementById("viewer").clientWidth, 500);
   document.getElementById("viewer").appendChild(renderer.domElement);
 
   const controls = new THREE.OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
 
-  const light1 = new THREE.DirectionalLight(0xffffff, 1);
-  light1.position.set(50, 50, 50);
+  const light1 = new THREE.DirectionalLight(0xffffff, 1.2);
+  light1.position.set(100, 100, 100);
   scene.add(light1);
 
-  const light2 = new THREE.AmbientLight(0x404040, 1.2);
-  scene.add(light2);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.6));
 
   const loader = new THREE.STLLoader();
-  loader.load(
-    "models/CORE-LOC.stl",
-    function (geometry) {
-      geometry.center();
+  loader.load("models/CORE-LOC.stl", function (geometry) {
+    geometry.computeBoundingBox();
+    geometry.center();
 
-      const material = new THREE.MeshStandardMaterial({
-        color: 0x1e3799,
-        metalness: 0.35,
-        roughness: 0.45
-      });
+    const material = new THREE.MeshStandardMaterial({
+      color: 0x1e3799,
+      metalness: 0.4,
+      roughness: 0.45
+    });
 
-      const mesh = new THREE.Mesh(geometry, material);
-      scene.add(mesh);
-    },
-    undefined,
-    function (error) {
-      console.error("STL load error:", error);
-    }
-  );
+    const mesh = new THREE.Mesh(geometry, material);
 
-  window.addEventListener("resize", () => {
-    camera.aspect = window.innerWidth / 600;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, 600);
+    const size = geometry.boundingBox.getSize(new THREE.Vector3()).length();
+    const scale = 60 / size;
+    mesh.scale.setScalar(scale);
+
+    scene.add(mesh);
   });
 
   function animate() {
@@ -133,8 +109,14 @@
     controls.update();
     renderer.render(scene, camera);
   }
-
   animate();
+
+  window.addEventListener("resize", () => {
+    const width = document.getElementById("viewer").clientWidth;
+    camera.aspect = width / 500;
+    camera.updateProjectionMatrix();
+    renderer.setSize(width, 500);
+  });
 </script>
 
 </body>
