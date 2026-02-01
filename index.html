@@ -1,150 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>David Aviña – Mechanical Engineer</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f4f6f8;
-      color: #2c3e50;
-    }
-
-    .container {
-      max-width: 1000px;
-      margin: auto;
-      padding: 40px 20px;
-    }
-
-    h1, h2 {
-      color: #1e3799;
-    }
-
-    p {
-      line-height: 1.6;
-      font-size: 16px;
-    }
-
-    #viewer {
-      width: 100%;
-      height: 500px;
-      margin-top: 40px;
-      border-radius: 10px;
-      background: #eaecef;
-    }
-  </style>
-</head>
-<body>
-
-<div class="container">
-  <h1>David Aviña Mechanical Engineer</h1>
-
-  <p>
-    I am David Aviña, a Mechanical Engineer with experience in project management and engineering design.
-    I have worked on structural and energy-related projects, focused on efficiency, quality, safety,
-    and technical problem solving, with a strong interest in continuous improvement, teamwork,
-    and delivering reliable engineering solutions worldwide.
-  </p>
-
-  <h2>Project Management Experience</h2>
-
-  <p>
-    I have led multiple engineering projects as a <strong>Project Manager</strong>, overseeing each phase
-    from initial planning to final delivery. In addition to project coordination and technical decision-making,
-    I am also responsible for <strong>Engineering Design</strong> and the development of fabrication drawings
-    using software such as SolidWorks, AutoCAD, and CATIA, validating accurate dimensions for proper manufacturing
-    while ensuring quality, safety, and schedule compliance.
-  </p>
-
-  <div id="viewer"></div>
-</div>
-
-<!-- ✅ THREE.JS MODERNO (MODULES) -->
 <script type="module">
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js';
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js';
-import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/STLLoader.js';
+  import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js';
+  import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js';
+  import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/STLLoader.js';
 
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xf4f6f8);
+  const viewer = document.getElementById("viewer");
 
-const viewer = document.getElementById("viewer");
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xf4f6f8);
 
-const camera = new THREE.PerspectiveCamera(
-  60,
-  viewer.clientWidth / viewer.clientHeight,
-  0.1,
-  5000
-);
+  const camera = new THREE.PerspectiveCamera(
+    60,
+    viewer.clientWidth / viewer.clientHeight,
+    0.1,
+    5000
+  );
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(viewer.clientWidth, viewer.clientHeight);
-viewer.appendChild(renderer.domElement);
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(viewer.clientWidth, viewer.clientHeight);
+  viewer.appendChild(renderer.domElement);
 
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
 
-// LUCES
-scene.add(new THREE.AmbientLight(0xffffff, 1.2));
+  scene.add(new THREE.AmbientLight(0xffffff, 1.2));
 
-const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(100, 200, 300);
-scene.add(light);
+  const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+  dirLight.position.set(100, 200, 300);
+  scene.add(dirLight);
 
-// STL LOADER
-const loader = new STLLoader();
+  const loader = new STLLoader();
+  loader.load(
+    'models/CORE-LOC.stl',
+    (geometry) => {
+      geometry.center();
 
-loader.load(
-  'models/CORE-LOC.stl',
-  (geometry) => {
+      const material = new THREE.MeshStandardMaterial({
+        color: 0x1e3799,
+        metalness: 0.4,
+        roughness: 0.45
+      });
 
-    console.log('STL CARGADO');
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.scale.set(0.05, 0.05, 0.05);
+      scene.add(mesh);
 
-    geometry.computeVertexNormals();
+      const box = new THREE.Box3().setFromObject(mesh);
+      const size = box.getSize(new THREE.Vector3()).length();
+      const center = box.getCenter(new THREE.Vector3());
 
-    const material = new THREE.MeshNormalMaterial();
-    const mesh = new THREE.Mesh(geometry, material);
+      controls.target.copy(center);
+      camera.position.set(center.x, center.y + size, center.z + size * 1.5);
+      camera.lookAt(center);
+      controls.update();
+    },
+    undefined,
+    (err) => console.error('STL ERROR:', err)
+  );
 
-    geometry.computeBoundingBox();
-
-    const center = new THREE.Vector3();
-    geometry.boundingBox.getCenter(center);
-    mesh.position.sub(center);
-
-    const size = new THREE.Vector3();
-    geometry.boundingBox.getSize(size);
-    const maxDim = Math.max(size.x, size.y, size.z);
-    const scale = 120 / maxDim;
-    mesh.scale.setScalar(scale);
-
-    scene.add(mesh);
-
-    camera.position.set(0, maxDim, maxDim * 2);
-    camera.lookAt(0, 0, 0);
+  function animate() {
+    requestAnimationFrame(animate);
     controls.update();
-  },
-  undefined,
-  (error) => {
-    console.error('ERROR STL:', error);
+    renderer.render(scene, camera);
   }
-);
+  animate();
 
-window.addEventListener('resize', () => {
-  const w = viewer.clientWidth;
-  const h = viewer.clientHeight;
-  camera.aspect = w / h;
-  camera.updateProjectionMatrix();
-  renderer.setSize(w, h);
-});
-
-function animate() {
-  requestAnimationFrame(animate);
-  controls.update();
-  renderer.render(scene, camera);
-}
-animate();
+  window.addEventListener('resize', () => {
+    camera.aspect = viewer.clientWidth / viewer.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(viewer.clientWidth, viewer.clientHeight);
+  });
 </script>
-
-</body>
-</html>
