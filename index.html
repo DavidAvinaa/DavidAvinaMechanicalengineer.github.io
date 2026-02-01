@@ -41,20 +41,20 @@
   <h1>David Aviña Mechanical Engineer</h1>
 
   <p>
-   I am David Aviña, a Mechanical Engineer with experience in project management and engineering design.
-      I have worked on structural and energy-related projects, focused on efficiency, quality, safety,
-      and technical problem solving, with a strong interest in continuous improvement, teamwork,
-      and delivering reliable engineering solutions worldwide.
+    I am David Aviña, a Mechanical Engineer with experience in project management and engineering design.
+    I have worked on structural and energy-related projects, focused on efficiency, quality, safety,
+    and technical problem solving, with a strong interest in continuous improvement, teamwork,
+    and delivering reliable engineering solutions worldwide.
   </p>
 
   <h2>Project Management Experience</h2>
 
   <p>
-  I have led multiple engineering projects as a <strong>Project Manager</strong>, overseeing each phase
-      from initial planning to final delivery. In addition to project coordination and technical decision-making,
-      I am also responsible for <strong>Engineering Design</strong> and the development of fabrication drawings
-      using software such as SolidWorks, AutoCAD, and CATIA, validating accurate dimensions for proper manufacturing
-      while ensuring quality, safety, and schedule compliance.
+    I have led multiple engineering projects as a <strong>Project Manager</strong>, overseeing each phase
+    from initial planning to final delivery. In addition to project coordination and technical decision-making,
+    I am also responsible for <strong>Engineering Design</strong> and the development of fabrication drawings
+    using software such as SolidWorks, AutoCAD, and CATIA, validating accurate dimensions for proper manufacturing
+    while ensuring quality, safety, and schedule compliance.
   </p>
 
   <div id="viewer"></div>
@@ -72,14 +72,13 @@
 
   const camera = new THREE.PerspectiveCamera(
     60,
-    viewer.clientWidth / 500,
+    viewer.clientWidth / viewer.clientHeight,
     0.1,
-    2000
+    5000
   );
-  camera.position.set(0, 80, 160);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(viewer.clientWidth, 500);
+  renderer.setSize(viewer.clientWidth, viewer.clientHeight);
   viewer.appendChild(renderer.domElement);
 
   const controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -92,11 +91,13 @@
   const light2 = new THREE.AmbientLight(0x404040, 1.5);
   scene.add(light2);
 
-  // ✅ STL LOADER CORRECTO
+  // 🔥 STL LOADER CON AUTO-AJUSTE DE CÁMARA
   const loader = new THREE.STLLoader();
   loader.load(
     'models/CORE-LOC.stl',
     function (geometry) {
+
+      geometry.computeBoundingBox();
       geometry.center();
 
       const material = new THREE.MeshStandardMaterial({
@@ -107,6 +108,22 @@
 
       const mesh = new THREE.Mesh(geometry, material);
       scene.add(mesh);
+
+      // 📐 Ajuste automático de cámara
+      const box = geometry.boundingBox;
+      const size = new THREE.Vector3();
+      box.getSize(size);
+
+      const maxDim = Math.max(size.x, size.y, size.z);
+      const fov = camera.fov * (Math.PI / 180);
+      let cameraZ = Math.abs(maxDim / Math.sin(fov / 2));
+      cameraZ *= 1.2;
+
+      camera.position.set(0, 0, cameraZ);
+      camera.lookAt(0, 0, 0);
+
+      controls.target.set(0, 0, 0);
+      controls.update();
     },
     undefined,
     function (error) {
@@ -116,9 +133,10 @@
 
   window.addEventListener('resize', () => {
     const width = viewer.clientWidth;
-    camera.aspect = width / 500;
+    const height = viewer.clientHeight;
+    camera.aspect = width / height;
     camera.updateProjectionMatrix();
-    renderer.setSize(width, 500);
+    renderer.setSize(width, height);
   });
 
   function animate() {
@@ -131,4 +149,3 @@
 
 </body>
 </html>
-
