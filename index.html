@@ -69,66 +69,56 @@ A VER AQUI TIENES MI CODIGO,DAMELO COREGIDO PORQUE CREO QUE APRTE TENGO DOS LOAD
   <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/controls/OrbitControls.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/loaders/STLLoader.js"></script>
 
-  <script>
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xf4f6f8);
+<script>
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xf4f6f8);
 
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / 500, 0.1, 2000);
-    camera.position.set(0, 80, 160);
+  const camera = new THREE.PerspectiveCamera(
+    60,
+    document.getElementById("viewer").clientWidth / 500,
+    0.1,
+    2000
+  );
+  camera.position.set(0, 80, 160);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(document.getElementById("viewer").clientWidth, 500);
-    document.getElementById("viewer").appendChild(renderer.domElement);
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(
+    document.getElementById("viewer").clientWidth,
+    500
+  );
+  document.getElementById("viewer").appendChild(renderer.domElement);
 
-    const controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
+  const controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
 
-    const light1 = new THREE.DirectionalLight(0xffffff, 1);
-    light1.position.set(100, 100, 100);
-    scene.add(light1);
+  scene.add(new THREE.DirectionalLight(0xffffff, 1).position.set(100,100,100));
+  scene.add(new THREE.AmbientLight(0x404040, 1.5));
 
-    const light2 = new THREE.AmbientLight(0x404040, 1.5);
-    scene.add(light2);
-
-    const loader = new THREE.STLLoader();
-   loader.load(
+  const loader = new THREE.STLLoader();
   loader.load(
-  '/DavidAvinaMechanicalEngineer.github.io/models/CORE-LOC.stl',
-  function (geometry) {
+    'models/CORE-LOC.stl',
+    function (geometry) {
+      geometry.center();
 
-        geometry.center();
-        geometry.scale(0.8, 0.8, 0.8);
+      const material = new THREE.MeshStandardMaterial({
+        color: 0x1e3799,
+        metalness: 0.4,
+        roughness: 0.45
+      });
 
-        const material = new THREE.MeshStandardMaterial({
-          color: 0x1e3799,
-          metalness: 0.4,
-          roughness: 0.45
-        });
-
-        const mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
-      },
-      undefined,
-      function (error) {
-        console.error(error);
-      }
-    );
-
-    window.addEventListener('resize', () => {
-      const width = document.getElementById("viewer").clientWidth;
-      camera.aspect = width / 500;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, 500);
-    });
-
-    function animate() {
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
+      const mesh = new THREE.Mesh(geometry, material);
+      scene.add(mesh);
+    },
+    undefined,
+    function (error) {
+      console.error('ERROR cargando STL:', error);
     }
-    animate();
-  </script>
+  );
 
-</body>
-</html>
-
+  function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  animate();
+</script>
