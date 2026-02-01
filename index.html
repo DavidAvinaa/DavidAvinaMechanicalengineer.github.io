@@ -1,130 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>David Aviña – Mechanical Engineer</title>
+<script>
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xf4f6f8);
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f4f6f8;
-      color: #2c3e50;
+  const camera = new THREE.PerspectiveCamera(
+    60,
+    document.getElementById("viewer").clientWidth / 500,
+    0.1,
+    2000
+  );
+  camera.position.set(0, 80, 160);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(
+    document.getElementById("viewer").clientWidth,
+    500
+  );
+  document.getElementById("viewer").appendChild(renderer.domElement);
+
+  const controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+
+  scene.add(new THREE.DirectionalLight(0xffffff, 1).position.set(100,100,100));
+  scene.add(new THREE.AmbientLight(0x404040, 1.5));
+
+  const loader = new THREE.STLLoader();
+  loader.load(
+    'models/CORE-LOC.stl',
+    function (geometry) {
+      geometry.center();
+
+      const material = new THREE.MeshStandardMaterial({
+        color: 0x1e3799,
+        metalness: 0.4,
+        roughness: 0.45
+      });
+
+      const mesh = new THREE.Mesh(geometry, material);
+      scene.add(mesh);
+    },
+    undefined,
+    function (error) {
+      console.error('ERROR cargando STL:', error);
     }
+  );
 
-    .container {
-      max-width: 1000px;
-      margin: auto;
-      padding: 40px 20px;
-    }
+  function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  animate();
+</script>
 
-    h1, h2 {
-      color: #1e3799;
-    }
-
-    h2 {
-      margin-top: 50px;
-    }
-
-    p {
-      line-height: 1.6;
-      font-size: 16px;
-    }
-
-    #viewer {
-      width: 100%;
-      height: 500px;
-      margin-top: 40px;
-      border-radius: 10px;
-      background: #eaecef;
-    }
-  </style>
-</head>
-
-<body>
-
-  <div class="container">
-    <h1>David Aviña – Mechanical Engineer</h1>
-
-    <p>
-      I am David Aviña, a Mechanical Engineer with experience in project management and engineering design.
-      I have worked on structural and energy-related projects, focused on efficiency, quality, safety,
-      and technical problem solving.
-    </p>
-
-    <h2>Project Management Experience</h2>
-
-    <p>
-      I have led multiple engineering projects as a <strong>Project Manager</strong>, overseeing planning,
-      execution, and delivery, while developing fabrication drawings using SolidWorks, AutoCAD, and CATIA.
-    </p>
-
-    <div id="viewer"></div>
-  </div>
-
-  <!-- THREE JS -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/controls/OrbitControls.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/loaders/STLLoader.js"></script>
-
-  <script>
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xf4f6f8);
-
-    const viewer = document.getElementById("viewer");
-    const width = viewer.clientWidth;
-    const height = 500;
-
-    const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 2000);
-    camera.position.set(0, 80, 160);
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(width, height);
-    viewer.appendChild(renderer.domElement);
-
-    const controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-
-    scene.add(new THREE.DirectionalLight(0xffffff, 1).position.set(100, 100, 100));
-    scene.add(new THREE.AmbientLight(0x404040, 1.5));
-
-    const loader = new THREE.STLLoader();
-    loader.load(
-      'models/CORE-LOC.stl',
-      function (geometry) {
-        geometry.center();
-        geometry.scale(0.8, 0.8, 0.8);
-
-        const material = new THREE.MeshStandardMaterial({
-          color: 0x1e3799,
-          metalness: 0.4,
-          roughness: 0.45
-        });
-
-        const mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
-      },
-      undefined,
-      function (error) {
-        console.error("STL load error:", error);
-      }
-    );
-
-    window.addEventListener('resize', () => {
-      const newWidth = viewer.clientWidth;
-      camera.aspect = newWidth / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(newWidth, height);
-    });
-
-    function animate() {
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
-    }
-    animate();
-  </script>
-
-</body>
-</html>
 
