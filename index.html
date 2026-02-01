@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>David Aviña – Mechanical Engineer</title>
+
   <style>
     body {
       margin: 0;
@@ -17,12 +18,11 @@
       padding: 40px 20px;
     }
 
-    h1 {
+    h1, h2 {
       color: #1e3799;
     }
 
     h2 {
-      color: #1e3799;
       margin-top: 50px;
     }
 
@@ -40,31 +40,29 @@
     }
   </style>
 </head>
+
 <body>
 
   <div class="container">
-    <h1>David Aviña Mechanical Engineer</h1>
+    <h1>David Aviña – Mechanical Engineer</h1>
 
     <p>
       I am David Aviña, a Mechanical Engineer with experience in project management and engineering design.
       I have worked on structural and energy-related projects, focused on efficiency, quality, safety,
-      and technical problem solving, with a strong interest in continuous improvement, teamwork,
-      and delivering reliable engineering solutions worldwide.
+      and technical problem solving.
     </p>
 
     <h2>Project Management Experience</h2>
 
     <p>
-      I have led multiple engineering projects as a <strong>Project Manager</strong>, overseeing each phase
-      from initial planning to final delivery. In addition to project coordination and technical decision-making,
-      I am also responsible for <strong>Engineering Design</strong> and the development of fabrication drawings
-      using software such as SolidWorks, AutoCAD, and CATIA, validating accurate dimensions for proper manufacturing
-      while ensuring quality, safety, and schedule compliance.
+      I have led multiple engineering projects as a <strong>Project Manager</strong>, overseeing planning,
+      execution, and delivery, while developing fabrication drawings using SolidWorks, AutoCAD, and CATIA.
     </p>
 
     <div id="viewer"></div>
   </div>
 
+  <!-- THREE JS -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/controls/OrbitControls.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/loaders/STLLoader.js"></script>
@@ -73,29 +71,27 @@
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf4f6f8);
 
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / 500, 0.1, 2000);
+    const viewer = document.getElementById("viewer");
+    const width = viewer.clientWidth;
+    const height = 500;
+
+    const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 2000);
     camera.position.set(0, 80, 160);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(document.getElementById("viewer").clientWidth, 500);
-    document.getElementById("viewer").appendChild(renderer.domElement);
+    renderer.setSize(width, height);
+    viewer.appendChild(renderer.domElement);
 
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
 
-    const light1 = new THREE.DirectionalLight(0xffffff, 1);
-    light1.position.set(100, 100, 100);
-    scene.add(light1);
-
-    const light2 = new THREE.AmbientLight(0x404040, 1.5);
-    scene.add(light2);
+    scene.add(new THREE.DirectionalLight(0xffffff, 1).position.set(100, 100, 100));
+    scene.add(new THREE.AmbientLight(0x404040, 1.5));
 
     const loader = new THREE.STLLoader();
-   loader.load(
-  loader.load(
-  '/DavidAvinaMechanicalEngineer.github.io/models/CORE-LOC.stl',
-  function (geometry) {
-
+    loader.load(
+      'models/CORE-LOC.stl',
+      function (geometry) {
         geometry.center();
         geometry.scale(0.8, 0.8, 0.8);
 
@@ -110,15 +106,15 @@
       },
       undefined,
       function (error) {
-        console.error(error);
+        console.error("STL load error:", error);
       }
     );
 
     window.addEventListener('resize', () => {
-      const width = document.getElementById("viewer").clientWidth;
-      camera.aspect = width / 500;
+      const newWidth = viewer.clientWidth;
+      camera.aspect = newWidth / height;
       camera.updateProjectionMatrix();
-      renderer.setSize(width, 500);
+      renderer.setSize(newWidth, height);
     });
 
     function animate() {
@@ -131,3 +127,4 @@
 
 </body>
 </html>
+
