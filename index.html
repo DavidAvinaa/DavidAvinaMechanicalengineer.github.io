@@ -1,72 +1,98 @@
-<script type="module">
-  import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js';
-  import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js';
-  import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/STLLoader.js';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>David Aviña Mechanical Engineer</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+    }
 
-  const viewer = document.getElementById("viewer");
+    h2 {
+      text-align: center;
+      margin-top: 40px;
+    }
 
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xf4f6f8);
+    #viewer {
+      width: 100%;
+      height: 600px;
+      background: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
 
-  const camera = new THREE.PerspectiveCamera(
-    60,
-    viewer.clientWidth / viewer.clientHeight,
-    0.1,
-    5000
-  );
+  <h2>3D Model – CORE-LOC</h2>
+  <div id="viewer"></div>
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(viewer.clientWidth, viewer.clientHeight);
-  viewer.appendChild(renderer.domElement);
+  <!-- THREE.JS -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/loaders/STLLoader.js"></script>
 
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
+  <script>
+    const container = document.getElementById("viewer");
 
-  scene.add(new THREE.AmbientLight(0xffffff, 1.2));
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xf0f0f0);
 
-  const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-  dirLight.position.set(100, 200, 300);
-  scene.add(dirLight);
+    const camera = new THREE.PerspectiveCamera(
+      60,
+      container.clientWidth / container.clientHeight,
+      0.1,
+      1000
+    );
+    camera.position.set(100, 100, 100);
 
-  const loader = new STLLoader();
-  loader.load(
-    'models/CORE-LOC.stl',
-    (geometry) => {
-      geometry.center();
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(renderer.domElement);
 
-      const material = new THREE.MeshStandardMaterial({
-        color: 0x1e3799,
-        metalness: 0.4,
-        roughness: 0.45
-      });
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
 
-      const mesh = new THREE.Mesh(geometry, material);
-      mesh.scale.set(0.05, 0.05, 0.05);
-      scene.add(mesh);
+    const light1 = new THREE.DirectionalLight(0xffffff, 1);
+    light1.position.set(1, 1, 1);
+    scene.add(light1);
 
-      const box = new THREE.Box3().setFromObject(mesh);
-      const size = box.getSize(new THREE.Vector3()).length();
-      const center = box.getCenter(new THREE.Vector3());
+    const light2 = new THREE.AmbientLight(0x404040, 2);
+    scene.add(light2);
 
-      controls.target.copy(center);
-      camera.position.set(center.x, center.y + size, center.z + size * 1.5);
-      camera.lookAt(center);
+    const loader = new THREE.STLLoader();
+    loader.load(
+      "models/CORE-LOC.stl",
+      function (geometry) {
+        const material = new THREE.MeshStandardMaterial({
+          color: 0x1565c0,
+          metalness: 0.3,
+          roughness: 0.6
+        });
+
+        const mesh = new THREE.Mesh(geometry, material);
+        geometry.center();
+        scene.add(mesh);
+      },
+      undefined,
+      function (error) {
+        console.error("Error loading STL:", error);
+      }
+    );
+
+    function animate() {
+      requestAnimationFrame(animate);
       controls.update();
-    },
-    undefined,
-    (err) => console.error('STL ERROR:', err)
-  );
+      renderer.render(scene, camera);
+    }
+    animate();
 
-  function animate() {
-    requestAnimationFrame(animate);
-    controls.update();
-    renderer.render(scene, camera);
-  }
-  animate();
+    window.addEventListener("resize", () => {
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+  </script>
 
-  window.addEventListener('resize', () => {
-    camera.aspect = viewer.clientWidth / viewer.clientHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(viewer.clientWidth, viewer.clientHeight);
-  });
-</script>
+</body>
+</html>
