@@ -91,9 +91,10 @@
     scene.add(light2);
 
     const loader = new THREE.STLLoader();
-    loader.load(
-      'models/CORE-LOC.stl',
-      function (geometry) {
+   loader.load(
+  '/DavidAvinaMechanicalengineer.github.io/models/CORE-LOC.stl',
+  function (geometry) {
+
         geometry.center();
         geometry.scale(0.8, 0.8, 0.8);
 
