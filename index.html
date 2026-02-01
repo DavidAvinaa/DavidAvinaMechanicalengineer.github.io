@@ -92,60 +92,45 @@
   scene.add(light2);
 
   // 🔥 STL LOADER CON AUTO-AJUSTE DE CÁMARA
+
   const loader = new THREE.STLLoader();
- loader.load(
+
+loader.load(
   'https://raw.githubusercontent.com/DavidAvinaa/DavidAvinaMechanicalengineer.github.io/main/models/CORE-LOC.stl',
-    function (geometry) {
+  function (geometry) {
 
-      geometry.computeBoundingBox();
-      geometry.center();
+    console.log('STL LOADED');
 
-      const material = new THREE.MeshStandardMaterial({
-        color: 0x1e3799,
-        metalness: 0.4,
-        roughness: 0.45
-      });
+    const material = new THREE.MeshStandardMaterial({
+      color: 0x1e3799,
+      metalness: 0.3,
+      roughness: 0.6
+    });
 
-      const mesh = new THREE.Mesh(geometry, material);
-      scene.add(mesh);
+    const mesh = new THREE.Mesh(geometry, material);
 
-      // 📐 Ajuste automático de cámara
-      const box = geometry.boundingBox;
-      const size = new THREE.Vector3();
-      box.getSize(size);
+    // 🔑 ESCALA CRÍTICA (mm → escena)
+    mesh.scale.set(0.05, 0.05, 0.05);
 
-      const maxDim = Math.max(size.x, size.y, size.z);
-      const fov = camera.fov * (Math.PI / 180);
-      let cameraZ = Math.abs(maxDim / Math.sin(fov / 2));
-      cameraZ *= 1.2;
+    // 🔑 CENTRAR MODELO
+    geometry.computeBoundingBox();
+    const center = new THREE.Vector3();
+    geometry.boundingBox.getCenter(center);
+    mesh.position.sub(center);
 
-      camera.position.set(0, 0, cameraZ);
-      camera.lookAt(0, 0, 0);
+    scene.add(mesh);
 
-      controls.target.set(0, 0, 0);
-      controls.update();
-    },
-    undefined,
-    function (error) {
-      console.error('STL load error:', error);
-    }
-  );
+    // 🔑 ENCUADRAR CÁMARA AUTOMÁTICAMENTE
+    const size = new THREE.Vector3();
+    geometry.boundingBox.getSize(size);
 
-  window.addEventListener('resize', () => {
-    const width = viewer.clientWidth;
-    const height = viewer.clientHeight;
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-    renderer.setSize(width, height);
-  });
-
-  function animate() {
-    requestAnimationFrame(animate);
+    const maxDim = Math.max(size.x, size.y, size.z);
+    camera.position.set(0, maxDim * 1.2, maxDim * 2);
+    camera.lookAt(0, 0, 0);
     controls.update();
-    renderer.render(scene, camera);
+  },
+  undefined,
+  function (error) {
+    console.error('STL LOAD ERROR:', error);
   }
-  animate();
-</script>
-
-</body>
-</html>
+);
