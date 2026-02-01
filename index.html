@@ -3,29 +3,69 @@
 <head>
   <meta charset="UTF-8" />
   <title>David Aviña Mechanical Engineer</title>
+
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f6f7;
+      color: #2c3e50;
     }
 
-    h2 {
-      text-align: center;
-      margin-top: 40px;
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    h1, h2 {
+      color: #1e3799;
+    }
+
+    p {
+      line-height: 1.6;
+      font-size: 16px;
     }
 
     #viewer {
       width: 100%;
       height: 600px;
       background: #e0e0e0;
+      border-radius: 10px;
+      margin-top: 40px;
     }
   </style>
 </head>
 <body>
 
-  <h2>3D Model – CORE-LOC</h2>
-  <div id="viewer"></div>
+  <div class="container">
+
+    <h1>David Aviña Mechanical Engineer</h1>
+
+    <p>
+      I am David Aviña, a Mechanical Engineer with experience in project management
+      and engineering design. I have worked on structural and energy-related projects,
+      focused on efficiency, quality, safety, and technical problem solving, with a strong
+      interest in continuous improvement, teamwork, and delivering reliable engineering
+      solutions worldwide.
+    </p>
+
+    <h2>Project Management Experience</h2>
+
+    <p>
+      I have led multiple engineering projects as a <strong>Project Manager</strong>,
+      overseeing each phase from initial planning to final delivery. In addition to project
+      coordination and technical decision-making, I am also responsible for
+      <strong>Engineering Design</strong> and the development of fabrication drawings
+      using software such as SolidWorks, AutoCAD, and CATIA, validating accurate
+      dimensions for proper manufacturing while ensuring quality, safety, and
+      schedule compliance.
+    </p>
+
+    <h2>3D Model – CORE-LOC</h2>
+    <div id="viewer"></div>
+
+  </div>
 
   <!-- THREE.JS -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
