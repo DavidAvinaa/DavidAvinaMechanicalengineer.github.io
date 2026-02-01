@@ -52,5 +52,99 @@
   <p>
     I have led multiple engineering projects as a <strong>Project Manager</strong>, overseeing each phase
     from initial planning to final delivery. In addition to project coordination and technical decision-making,
-    I am also responsible for <strong>Engineering
+    I am also responsible for <strong>Engineering Design</strong> and the development of fabrication drawings
+    using software such as SolidWorks, AutoCAD, and CATIA, validating accurate dimensions for proper manufacturing
+    while ensuring quality, safety, and schedule compliance.
+  </p>
 
+  <div id="viewer"></div>
+</div>
+
+<!-- ✅ THREE.JS MODERNO (MODULES) -->
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js';
+import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/STLLoader.js';
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xf4f6f8);
+
+const viewer = document.getElementById("viewer");
+
+const camera = new THREE.PerspectiveCamera(
+  60,
+  viewer.clientWidth / viewer.clientHeight,
+  0.1,
+  5000
+);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(viewer.clientWidth, viewer.clientHeight);
+viewer.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+
+// LUCES
+scene.add(new THREE.AmbientLight(0xffffff, 1.2));
+
+const light = new THREE.DirectionalLight(0xffffff, 1);
+light.position.set(100, 200, 300);
+scene.add(light);
+
+// STL LOADER
+const loader = new STLLoader();
+
+loader.load(
+  'models/CORE-LOC.stl',
+  (geometry) => {
+
+    console.log('STL CARGADO');
+
+    geometry.computeVertexNormals();
+
+    const material = new THREE.MeshNormalMaterial();
+    const mesh = new THREE.Mesh(geometry, material);
+
+    geometry.computeBoundingBox();
+
+    const center = new THREE.Vector3();
+    geometry.boundingBox.getCenter(center);
+    mesh.position.sub(center);
+
+    const size = new THREE.Vector3();
+    geometry.boundingBox.getSize(size);
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const scale = 120 / maxDim;
+    mesh.scale.setScalar(scale);
+
+    scene.add(mesh);
+
+    camera.position.set(0, maxDim, maxDim * 2);
+    camera.lookAt(0, 0, 0);
+    controls.update();
+  },
+  undefined,
+  (error) => {
+    console.error('ERROR STL:', error);
+  }
+);
+
+window.addEventListener('resize', () => {
+  const w = viewer.clientWidth;
+  const h = viewer.clientHeight;
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h);
+});
+
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+</script>
+
+</body>
+</html>
