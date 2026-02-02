@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+
+  <!-- 🔥 CLAVE PARA CELULAR -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
   <title>David Aviña Mechanical Engineer</title>
 
   <!-- IMPORT MAP -->
@@ -42,6 +46,26 @@
       background: linear-gradient(180deg, #f2f2f2, #dcdcdc);
       border-radius: 12px;
       margin-top: 40px;
+    }
+
+    /* 📱 AJUSTES SOLO PARA CELULAR */
+    @media (max-width: 768px) {
+      #viewer {
+        height: 420px;
+        border-radius: 8px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+
+      p {
+        font-size: 15px;
+      }
     }
   </style>
 </head>
@@ -94,7 +118,7 @@
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(container.clientWidth, container.clientHeight);
-  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // 🔥 Safari safe
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   container.appendChild(renderer.domElement);
@@ -102,9 +126,11 @@
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.dampingFactor = 0.08;
+  controls.enablePan = false;              // mejor UX en celular
+  controls.rotateSpeed = 0.7;
+  controls.zoomSpeed = 0.8;
 
   /* ===== LUCES ===== */
-
   scene.add(new THREE.AmbientLight(0xffffff, 0.4));
 
   const keyLight = new THREE.DirectionalLight(0xffffff, 1.1);
@@ -122,7 +148,6 @@
   scene.add(rimLight);
 
   /* ===== STL ===== */
-
   const loader = new STLLoader();
   loader.load(
     "./models/CORE-LOC.stl",
@@ -150,10 +175,21 @@
       camera.position.set(size * 0.9, size * 0.8, size * 0.9);
       camera.lookAt(center);
       controls.update();
-    },
-    undefined,
-    (error) => console.error("STL load error:", error)
+    }
   );
+
+  function resizeRenderer() {
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(width, height);
+  }
+
+  window.addEventListener("resize", resizeRenderer);
+  window.addEventListener("orientationchange", () => {
+    setTimeout(resizeRenderer, 300);
+  });
 
   function animate() {
     requestAnimationFrame(animate);
@@ -162,13 +198,8 @@
   }
 
   animate();
-
-  window.addEventListener("resize", () => {
-    camera.aspect = container.clientWidth / container.clientHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(container.clientWidth, container.clientHeight);
-  });
 </script>
 
 </body>
 </html>
+
