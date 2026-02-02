@@ -33,6 +33,22 @@
       background: #e0e0e0;
       border-radius: 10px;
       margin-top: 40px;
+      position: relative;
+    }
+
+    #viewer::after {
+      content: "Loading 3D model…";
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #777;
+      font-size: 18px;
+    }
+
+    canvas {
+      border-radius: 10px;
     }
   </style>
 </head>
@@ -68,7 +84,6 @@
 
 </div>
 
-<!-- ✅ THREE.JS MODERNO (ES MODULES) -->
 <script type="module">
   import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js";
   import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js";
@@ -83,45 +98,64 @@
     60,
     container.clientWidth / container.clientHeight,
     0.1,
-    2000
+    5000
   );
-  camera.position.set(150, 150, 150);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(container.clientWidth, container.clientHeight);
   container.appendChild(renderer.domElement);
 
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
 
-  scene.add(new THREE.AmbientLight(0xffffff, 1.8));
+  scene.add(new THREE.AmbientLight(0xffffff, 1.6));
 
   const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-  dirLight.position.set(100, 100, 100);
+  dirLight.position.set(200, 200, 200);
   scene.add(dirLight);
 
   const loader = new STLLoader();
-  loader.load("models/CORE-LOC.stl", (geometry) => {
 
-    geometry.center();
+  loader.load(
+    "./models/CORE-LOC.stl",
+    (geometry) => {
 
-    const material = new THREE.MeshStandardMaterial({
-      color: 0x1565c0,
-      metalness: 0.3,
-      roughness: 0.6
-    });
+      geometry.computeVertexNormals();
+      geometry.center();
 
-    const mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
+      const material = new THREE.MeshStandardMaterial({
+        color: 0x1565c0,
+        metalness: 0.35,
+        roughness: 0.55
+      });
 
-    const box = new THREE.Box3().setFromObject(mesh);
-    const size = box.getSize(new THREE.Vector3()).length();
-    const center = box.getCenter(new THREE.Vector3());
+      const mesh = new THREE.Mesh(geometry, material);
+      scene.add(mesh);
 
-    controls.target.copy(center);
-    camera.position.set(size, size, size);
-    controls.update();
-  });
+      const box = new THREE.Box3().setFromObject(mesh);
+      const size = box.getSize(new THREE.Vector3());
+      const center = box.getCenter(new THREE.Vector3());
+
+      const maxDim = Math.max(size.x, size.y, size.z);
+      const fov = camera.fov * (Math.PI / 180);
+      let cameraZ = Math.abs(maxDim / Math.sin(fov / 2));
+      cameraZ *= 1.3;
+
+      camera.position.set(center.x, center.y, cameraZ);
+      camera.lookAt(center);
+      controls.target.copy(center);
+      controls.update();
+
+      container.classList.remove("loading");
+      container.querySelector("::after");
+    },
+    undefined,
+    (error) => {
+      console.error("❌ STL load error:", error);
+      container.innerHTML = "<p style='padding:20px;color:red'>Error loading STL</p>";
+    }
+  );
 
   function animate() {
     requestAnimationFrame(animate);
@@ -139,3 +173,4 @@
 
 </body>
 </html>
+
