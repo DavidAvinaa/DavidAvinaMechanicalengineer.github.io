@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>David Aviña Mechanical Engineer</title>
 
-  <!-- ✅ IMPORT MAP (ESTO ES LA CLAVE) -->
+  <!-- IMPORT MAP -->
   <script type="importmap">
   {
     "imports": {
@@ -39,8 +39,8 @@
     #viewer {
       width: 100%;
       height: 600px;
-      background: #e0e0e0;
-      border-radius: 10px;
+      background: linear-gradient(180deg, #f2f2f2, #dcdcdc);
+      border-radius: 12px;
       margin-top: 40px;
     }
   </style>
@@ -55,19 +55,7 @@
   <p>
     I am David Aviña, a Mechanical Engineer with experience in project management
     and engineering design. I have worked on structural and energy-related projects,
-    focused on efficiency, quality, safety, and technical problem solving, with a strong
-    interest in continuous improvement, teamwork, and delivering reliable engineering
-    solutions worldwide.
-  </p>
-
-  <h2>Project Management Experience</h2>
-
-  <p>
-    I have led multiple engineering projects as a <strong>Project Manager</strong>,
-    overseeing each phase from initial planning to final delivery. In addition to project
-    coordination and technical decision-making, I am also responsible for
-    <strong>Engineering Design</strong> and the development of fabrication drawings
-    using software such as SolidWorks, AutoCAD, and CATIA.
+    focused on efficiency, quality, safety, and technical problem solving.
   </p>
 
   <h2>3D Model – CORE-LOC</h2>
@@ -92,32 +80,60 @@
     5000
   );
 
+  camera.position.set(200, 200, 200);
+
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   container.appendChild(renderer.domElement);
 
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
 
-  scene.add(new THREE.AmbientLight(0xffffff, 1.6));
+  /* ===== LUCES ===== */
 
-  const light = new THREE.DirectionalLight(0xffffff, 1);
-  light.position.set(200, 200, 200);
-  scene.add(light);
+  // Ambient suave
+  scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+
+  // Key Light
+  const keyLight = new THREE.DirectionalLight(0xffffff, 1.1);
+  keyLight.position.set(300, 300, 300);
+  keyLight.castShadow = true;
+  keyLight.shadow.mapSize.set(2048, 2048);
+  scene.add(keyLight);
+
+  // Fill Light
+  const fillLight = new THREE.DirectionalLight(0xffffff, 0.45);
+  fillLight.position.set(-200, 150, 200);
+  scene.add(fillLight);
+
+  // Rim Light (define aristas)
+  const rimLight = new THREE.DirectionalLight(0xffffff, 0.6);
+  rimLight.position.set(-300, 200, -300);
+  scene.add(rimLight);
+
+  /* ===== STL ===== */
 
   const loader = new STLLoader();
   loader.load(
     "./models/CORE-LOC.stl",
     (geometry) => {
+
       geometry.center();
+      geometry.computeVertexNormals();
 
       const material = new THREE.MeshStandardMaterial({
         color: 0x1565c0,
-        metalness: 0.35,
-        roughness: 0.55
+        metalness: 0.25,
+        roughness: 0.45
       });
 
       const mesh = new THREE.Mesh(geometry, material);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
       scene.add(mesh);
 
       const box = new THREE.Box3().setFromObject(mesh);
@@ -125,12 +141,12 @@
       const center = box.getCenter(new THREE.Vector3());
 
       controls.target.copy(center);
-      camera.position.set(size, size, size);
+      camera.position.set(size * 0.9, size * 0.8, size * 0.9);
       camera.lookAt(center);
       controls.update();
     },
     undefined,
-    (err) => console.error("STL error:", err)
+    (error) => console.error("STL load error:", error)
   );
 
   function animate() {
@@ -138,6 +154,7 @@
     controls.update();
     renderer.render(scene, camera);
   }
+
   animate();
 
   window.addEventListener("resize", () => {
@@ -149,4 +166,3 @@
 
 </body>
 </html>
-
