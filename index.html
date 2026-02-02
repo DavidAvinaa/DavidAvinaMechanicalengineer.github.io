@@ -33,13 +33,6 @@
       background: #e0e0e0;
       border-radius: 10px;
       margin-top: 40px;
-      position: relative;
-    }
-
-    #viewer::after {
-      content: "Loading 3D model…";
-      position: absolute;
-      inset: 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -48,6 +41,8 @@
     }
 
     canvas {
+      width: 100%;
+      height: 100%;
       border-radius: 10px;
     }
   </style>
@@ -80,14 +75,14 @@
   </p>
 
   <h2>3D Model – CORE-LOC</h2>
-  <div id="viewer"></div>
+  <div id="viewer">Loading 3D model…</div>
 
 </div>
 
 <script type="module">
-  import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js";
-  import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js";
-  import { STLLoader } from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/STLLoader.js";
+  import * as THREE from "https://unpkg.com/three@0.158.0/build/three.module.js";
+  import { OrbitControls } from "https://unpkg.com/three@0.158.0/examples/jsm/controls/OrbitControls.js";
+  import { STLLoader } from "https://unpkg.com/three@0.158.0/examples/jsm/loaders/STLLoader.js";
 
   const container = document.getElementById("viewer");
 
@@ -104,6 +99,7 @@
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(container.clientWidth, container.clientHeight);
+  container.innerHTML = "";
   container.appendChild(renderer.domElement);
 
   const controls = new OrbitControls(camera, renderer.domElement);
@@ -116,11 +112,9 @@
   scene.add(dirLight);
 
   const loader = new STLLoader();
-
   loader.load(
     "./models/CORE-LOC.stl",
     (geometry) => {
-
       geometry.computeVertexNormals();
       geometry.center();
 
@@ -138,22 +132,14 @@
       const center = box.getCenter(new THREE.Vector3());
 
       const maxDim = Math.max(size.x, size.y, size.z);
-      const fov = camera.fov * (Math.PI / 180);
-      let cameraZ = Math.abs(maxDim / Math.sin(fov / 2));
-      cameraZ *= 1.3;
-
-      camera.position.set(center.x, center.y, cameraZ);
-      camera.lookAt(center);
+      camera.position.set(maxDim, maxDim, maxDim);
       controls.target.copy(center);
       controls.update();
-
-      container.classList.remove("loading");
-      container.querySelector("::after");
     },
     undefined,
     (error) => {
       console.error("❌ STL load error:", error);
-      container.innerHTML = "<p style='padding:20px;color:red'>Error loading STL</p>";
+      container.innerHTML = "Error loading STL";
     }
   );
 
@@ -173,4 +159,3 @@
 
 </body>
 </html>
-
