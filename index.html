@@ -2,16 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>David Aviña Mechanical Engineer</title>
+  <title>David Aviña – Mechanical Engineer</title>
 
-  <!-- ✅ IMPORT MAP (ESTO ES LA CLAVE) -->
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js"
-    }
-  }
-  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
     body {
@@ -40,8 +33,26 @@
       width: 100%;
       height: 600px;
       background: #e0e0e0;
-      border-radius: 10px;
+      border-radius: 12px;
       margin-top: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #loading {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #777;
+      font-size: 18px;
+      background: #e0e0e0;
+      z-index: 10;
+    }
+
+    canvas {
+      display: block;
     }
   </style>
 </head>
@@ -50,7 +61,7 @@
 
 <div class="container">
 
-  <h1>David Aviña Mechanical Engineer</h1>
+  <h1>David Aviña – Mechanical Engineer</h1>
 
   <p>
     I am David Aviña, a Mechanical Engineer with experience in project management
@@ -71,20 +82,26 @@
   </p>
 
   <h2>3D Model – CORE-LOC</h2>
-  <div id="viewer"></div>
+
+  <div id="viewer">
+    <div id="loading">Loading 3D model…</div>
+  </div>
 
 </div>
 
 <script type="module">
-  import * as THREE from "three";
-  import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js";
-  import { STLLoader } from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/STLLoader.js";
+  import * as THREE from "https://unpkg.com/three@0.152.2/build/three.module.js";
+  import { OrbitControls } from "https://unpkg.com/three@0.152.2/examples/jsm/controls/OrbitControls.js";
+  import { STLLoader } from "https://unpkg.com/three@0.152.2/examples/jsm/loaders/STLLoader.js";
 
   const container = document.getElementById("viewer");
+  const loading = document.getElementById("loading");
 
+  /* ESCENA */
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xf0f0f0);
+  scene.background = new THREE.Color(0xeeeeee);
 
+  /* CÁMARA */
   const camera = new THREE.PerspectiveCamera(
     60,
     container.clientWidth / container.clientHeight,
@@ -92,47 +109,86 @@
     5000
   );
 
+  /* RENDERER */
   const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   container.appendChild(renderer.domElement);
 
+  /* CONTROLES */
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
 
-  scene.add(new THREE.AmbientLight(0xffffff, 1.6));
+  /* LUCES */
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+  scene.add(ambientLight);
 
-  const light = new THREE.DirectionalLight(0xffffff, 1);
-  light.position.set(200, 200, 200);
-  scene.add(light);
+  const keyLight = new THREE.DirectionalLight(0xffffff, 1);
+  keyLight.position.set(5, 10, 7);
+  keyLight.castShadow = true;
+  scene.add(keyLight);
 
+  const fillLight = new THREE.DirectionalLight(0xffffff, 0.5);
+  fillLight.position.set(-5, 5, -5);
+  scene.add(fillLight);
+
+  /* CARGAR STL */
   const loader = new STLLoader();
+
   loader.load(
     "./models/CORE-LOC.stl",
     (geometry) => {
+
+      geometry.computeVertexNormals();
       geometry.center();
 
       const material = new THREE.MeshStandardMaterial({
-        color: 0x1565c0,
-        metalness: 0.35,
-        roughness: 0.55
+        color: 0x7a7a7a,
+        metalness: 0.25,
+        roughness: 0.6
       });
 
       const mesh = new THREE.Mesh(geometry, material);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
       scene.add(mesh);
 
+      /* BORDES (aristas) */
+      const edges = new THREE.EdgesGeometry(geometry);
+      const edgeLines = new THREE.LineSegments(
+        edges,
+        new THREE.LineBasicMaterial({ color: 0x000000 })
+      );
+      mesh.add(edgeLines);
+
+      /* AJUSTAR CÁMARA */
       const box = new THREE.Box3().setFromObject(mesh);
-      const size = box.getSize(new THREE.Vector3()).length();
+      const size = box.getSize(new THREE.Vector3());
       const center = box.getCenter(new THREE.Vector3());
 
-      controls.target.copy(center);
-      camera.position.set(size, size, size);
+      const maxDim = Math.max(size.x, size.y, size.z);
+      const fov = camera.fov * (Math.PI / 180);
+      let cameraZ = Math.abs(maxDim / Math.sin(fov / 2));
+      cameraZ *= 1.3;
+
+      camera.position.set(center.x, center.y, cameraZ);
       camera.lookAt(center);
+      controls.target.copy(center);
       controls.update();
+
+      loading.style.display = "none";
     },
     undefined,
-    (err) => console.error("STL error:", err)
+    (error) => {
+      console.error("STL error:", error);
+      loading.innerText = "Error loading 3D model";
+    }
   );
 
+  /* ANIMACIÓN */
   function animate() {
     requestAnimationFrame(animate);
     controls.update();
@@ -140,6 +196,12 @@
   }
   animate();
 
+  /* FIX SAFARI iOS */
+  window.addEventListener("touchstart", () => {
+    renderer.render(scene, camera);
+  });
+
+  /* RESPONSIVE */
   window.addEventListener("resize", () => {
     camera.aspect = container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
