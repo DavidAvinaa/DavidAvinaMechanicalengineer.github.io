@@ -1,168 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>David Aviña – Mechanical Engineer</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>David Aviña Mechanical Engineer</title>
 
-<style>
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f5f6f7;
-  color: #2c3e50;
-}
+  <!-- ✅ IMPORT MAP (ESTO ES LA CLAVE) -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js"
+    }
+  }
+  </script>
 
-.container {
-  max-width: 1000px;
-  margin: auto;
-  padding: 40px 20px;
-}
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f6f7;
+      color: #2c3e50;
+    }
 
-h1, h2 {
-  color: #1e3799;
-}
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 40px 20px;
+    }
 
-p {
-  line-height: 1.6;
-}
+    h1, h2 {
+      color: #1e3799;
+    }
 
-#viewer {
-  width: 100%;
-  height: 600px;
-  background: #e0e0e0;
-  border-radius: 12px;
-  margin-top: 40px;
-  position: relative;
-}
+    p {
+      line-height: 1.6;
+      font-size: 16px;
+    }
 
-#loading {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #777;
-  font-size: 18px;
-  background: #e0e0e0;
-  z-index: 5;
-}
-</style>
+    #viewer {
+      width: 100%;
+      height: 600px;
+      background: #e0e0e0;
+      border-radius: 10px;
+      margin-top: 40px;
+    }
+  </style>
 </head>
 
 <body>
 
 <div class="container">
-  <h1>David Aviña – Mechanical Engineer</h1>
+
+  <h1>David Aviña Mechanical Engineer</h1>
 
   <p>
     I am David Aviña, a Mechanical Engineer with experience in project management
     and engineering design. I have worked on structural and energy-related projects,
-    focused on efficiency, quality, safety, and technical problem solving.
+    focused on efficiency, quality, safety, and technical problem solving, with a strong
+    interest in continuous improvement, teamwork, and delivering reliable engineering
+    solutions worldwide.
+  </p>
+
+  <h2>Project Management Experience</h2>
+
+  <p>
+    I have led multiple engineering projects as a <strong>Project Manager</strong>,
+    overseeing each phase from initial planning to final delivery. In addition to project
+    coordination and technical decision-making, I am also responsible for
+    <strong>Engineering Design</strong> and the development of fabrication drawings
+    using software such as SolidWorks, AutoCAD, and CATIA.
   </p>
 
   <h2>3D Model – CORE-LOC</h2>
+  <div id="viewer"></div>
 
-  <div id="viewer">
-    <div id="loading">Loading 3D model…</div>
-  </div>
 </div>
 
-<!-- THREE.JS CLÁSICO (COMPATIBLE CON SAFARI) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/examples/js/controls/OrbitControls.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/examples/js/loaders/STLLoader.js"></script>
+<script type="module">
+  import * as THREE from "three";
+  import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js";
+  import { STLLoader } from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/STLLoader.js";
 
-<script>
-const container = document.getElementById("viewer");
-const loading = document.getElementById("loading");
+  const container = document.getElementById("viewer");
 
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xf0f0f0);
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xf0f0f0);
 
-const camera = new THREE.PerspectiveCamera(
-  60,
-  container.clientWidth / container.clientHeight,
-  0.1,
-  5000
-);
+  const camera = new THREE.PerspectiveCamera(
+    60,
+    container.clientWidth / container.clientHeight,
+    0.1,
+    5000
+  );
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(container.clientWidth, container.clientHeight);
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.shadowMap.enabled = true;
-container.appendChild(renderer.domElement);
-
-/* CONTROLES */
-const controls = new THREE.OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-
-/* LUCES */
-scene.add(new THREE.AmbientLight(0xffffff, 0.4));
-
-const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-dirLight.position.set(5, 10, 7);
-dirLight.castShadow = true;
-scene.add(dirLight);
-
-/* STL */
-const loader = new THREE.STLLoader();
-loader.load(
-  "models/CORE-LOC.stl",
-  function (geometry) {
-
-    geometry.computeVertexNormals();
-    geometry.center();
-
-    const material = new THREE.MeshStandardMaterial({
-      color: 0x7a7a7a,
-      metalness: 0.3,
-      roughness: 0.6
-    });
-
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    scene.add(mesh);
-
-    /* BORDES */
-    const edges = new THREE.EdgesGeometry(geometry);
-    const lines = new THREE.LineSegments(
-      edges,
-      new THREE.LineBasicMaterial({ color: 0x000000 })
-    );
-    mesh.add(lines);
-
-    const box = new THREE.Box3().setFromObject(mesh);
-    const size = box.getSize(new THREE.Vector3());
-    const center = box.getCenter(new THREE.Vector3());
-
-    const maxDim = Math.max(size.x, size.y, size.z);
-    camera.position.set(center.x, center.y, maxDim * 1.6);
-    camera.lookAt(center);
-    controls.target.copy(center);
-
-    loading.style.display = "none";
-  },
-  undefined,
-  function (error) {
-    console.error(error);
-    loading.innerText = "Error loading STL";
-  }
-);
-
-function animate() {
-  requestAnimationFrame(animate);
-  controls.update();
-  renderer.render(scene, camera);
-}
-animate();
-
-window.addEventListener("resize", () => {
-  camera.aspect = container.clientWidth / container.clientHeight;
-  camera.updateProjectionMatrix();
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(container.clientWidth, container.clientHeight);
-});
+  container.appendChild(renderer.domElement);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+
+  scene.add(new THREE.AmbientLight(0xffffff, 1.6));
+
+  const light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(200, 200, 200);
+  scene.add(light);
+
+  const loader = new STLLoader();
+  loader.load(
+    "./models/CORE-LOC.stl",
+    (geometry) => {
+      geometry.center();
+
+      const material = new THREE.MeshStandardMaterial({
+        color: 0x1565c0,
+        metalness: 0.35,
+        roughness: 0.55
+      });
+
+      const mesh = new THREE.Mesh(geometry, material);
+      scene.add(mesh);
+
+      const box = new THREE.Box3().setFromObject(mesh);
+      const size = box.getSize(new THREE.Vector3()).length();
+      const center = box.getCenter(new THREE.Vector3());
+
+      controls.target.copy(center);
+      camera.position.set(size, size, size);
+      camera.lookAt(center);
+      controls.update();
+    },
+    undefined,
+    (err) => console.error("STL error:", err)
+  );
+
+  function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener("resize", () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
 </script>
 
 </body>
