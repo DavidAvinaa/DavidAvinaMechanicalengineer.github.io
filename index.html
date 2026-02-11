@@ -1,87 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
 <title>David Aviña Mechanical Engineer</title>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js"
+  }
+}
+</script>
 
 <style>
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f6f7; /* Fondo claro original */
+  color: #2c3e50;
 }
 
-/* ===== FULL SCREEN HERO ===== */
+/* ===== HERO FULL SCREEN ===== */
 .hero {
   height: 100vh;
+  background: linear-gradient(135deg, #1e3799, #0c2461);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
   padding: 20px;
+  color: white;
 }
 
 .profile-img {
-  width: 220px;
-  height: 220px;
+  width: 230px;
+  height: 230px;
   border-radius: 50%;
   object-fit: cover;
-  object-position: center top;
-  border: 5px solid white;
-  box-shadow: 0 0 25px rgba(255,255,255,0.4);
-  margin-bottom: 20px;
+  object-position: center;
+  border: 6px solid white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  margin-bottom: 25px;
 }
 
 .hero h1 {
-  font-size: 28px;
   margin: 10px 0;
+  font-size: 28px;
 }
 
 .hero p {
-  margin: 5px 0;
+  margin: 6px 0;
   font-size: 16px;
 }
 
-/* ===== CONTENT SECTION ===== */
+/* ===== CONTENIDO ===== */
+
 .container {
-  max-width: 900px;
+  max-width: 1000px;
   margin: auto;
   padding: 40px 20px;
 }
 
-h2 {
-  margin-top: 40px;
-  border-bottom: 2px solid rgba(255,255,255,0.3);
-  padding-bottom: 10px;
+.container h1 {
+  color: #1e3799;
 }
 
-/* ===== 3D VIEWER ===== */
+h2 {
+  color: #1e3799;
+  margin-top: 40px;
+}
+
+p {
+  line-height: 1.7;
+  font-size: 16px;
+}
+
 #viewer {
   width: 100%;
-  height: 500px;
-  margin-top: 20px;
+  height: 600px;
+  background: linear-gradient(180deg, #f2f2f2, #dcdcdc);
+  border-radius: 12px;
+  margin-top: 30px;
+}
+
+@media (max-width: 768px) {
+  #viewer {
+    height: 420px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- ===== HERO FULL SCREEN ===== -->
+<!-- ===== HERO CONTACTO FULL SCREEN ===== -->
 <section class="hero">
+
   <img src="foto.jpg" alt="David Aviña" class="profile-img">
 
-  <h1>David Aviña Mechanical Engineer</h1>
+  <h1>ERICK DAVID AVIÑA MORALES</h1>
+  <p><strong>Project Manager / Design Engineer</strong></p>
+  <p>Ingeniero Mecánico y en Sistemas Energéticos</p>
+  <p>📱 55 8056 2436</p>
+  <p>📧 davidavina_@hotmail.com</p>
 
-  <p>📧 erick_david_am@hotmail.com</p>
-  <p>📞 +52 55 3850 6019</p>
-  <p>📍 Mexico City</p>
 </section>
 
-<!-- ===== ABOUT / EXPERIENCE ===== -->
+<!-- ===== CONTENIDO PROFESIONAL ===== -->
 <div class="container">
+
+  <h1>David Aviña Mechanical Engineer</h1>
 
   <p>
     I am David Aviña, a Mechanical Engineer with experience in project management
@@ -106,66 +137,95 @@ h2 {
 
 </div>
 
-<!-- THREE JS -->
-<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/loaders/STLLoader.js"></script>
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js";
+import { STLLoader } from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/STLLoader.js";
 
-<script>
+const container = document.getElementById("viewer");
+
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x1a1a1a);
+scene.background = new THREE.Color(0xf0f0f0);
 
-const camera = new THREE.PerspectiveCamera(75, 
-  document.getElementById('viewer').clientWidth /
-  document.getElementById('viewer').clientHeight,
+const camera = new THREE.PerspectiveCamera(
+  60,
+  container.clientWidth / container.clientHeight,
   0.1,
-  1000
+  5000
 );
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(
-  document.getElementById('viewer').clientWidth,
-  document.getElementById('viewer').clientHeight
-);
-document.getElementById('viewer').appendChild(renderer.domElement);
+renderer.setSize(container.clientWidth, container.clientHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+container.appendChild(renderer.domElement);
 
-/* ===== MEJOR ILUMINACIÓN ===== */
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-scene.add(ambientLight);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.enablePan = false;
+controls.rotateSpeed = 0.8;
 
-const directionalLight1 = new THREE.DirectionalLight(0xffffff, 1);
-directionalLight1.position.set(5, 10, 7);
-scene.add(directionalLight1);
+/* ===== ILUMINACIÓN MEJORADA ===== */
 
-const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.6);
-directionalLight2.position.set(-5, -5, -5);
-scene.add(directionalLight2);
+scene.add(new THREE.AmbientLight(0xffffff, 0.5));
 
-const pointLight = new THREE.PointLight(0xffffff, 0.8);
-pointLight.position.set(0, 5, 5);
-scene.add(pointLight);
+const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
+keyLight.position.set(300, 300, 300);
+scene.add(keyLight);
 
-/* ===== MATERIAL MÁS PROFESIONAL ===== */
-const material = new THREE.MeshStandardMaterial({
-  color: 0x00bcd4,
-  metalness: 0.6,
-  roughness: 0.3
-});
+const fillLight = new THREE.DirectionalLight(0xffffff, 0.6);
+fillLight.position.set(-300, 150, 200);
+scene.add(fillLight);
 
-const loader = new THREE.STLLoader();
-loader.load('models/coreloc.stl', function (geometry) {
-  const mesh = new THREE.Mesh(geometry, material);
+const rimLight = new THREE.DirectionalLight(0xffffff, 0.8);
+rimLight.position.set(-200, 250, -300);
+scene.add(rimLight);
+
+/* ===== STL ===== */
+
+const loader = new STLLoader();
+loader.load("./models/CORE-LOC.stl", (geometry) => {
+
   geometry.center();
+  geometry.computeVertexNormals();
+
+  const material = new THREE.MeshStandardMaterial({
+    color: 0x1565c0,
+    metalness: 0.4,
+    roughness: 0.35
+  });
+
+  const mesh = new THREE.Mesh(geometry, material);
   scene.add(mesh);
 
-  camera.position.z = 5;
+  const box = new THREE.Box3().setFromObject(mesh);
+  const size = box.getSize(new THREE.Vector3()).length();
+  const center = box.getCenter(new THREE.Vector3());
 
-  function animate() {
-    requestAnimationFrame(animate);
-    mesh.rotation.y += 0.01;
-    renderer.render(scene, camera);
-  }
-  animate();
+  controls.target.copy(center);
+  camera.position.set(size * 0.9, size * 0.8, size * 0.9);
+  camera.lookAt(center);
+  controls.update();
 });
+
+function resizeRenderer() {
+  const width = container.clientWidth;
+  const height = container.clientHeight;
+  camera.aspect = width / height;
+  camera.updateProjectionMatrix();
+  renderer.setSize(width, height);
+}
+
+window.addEventListener("resize", resizeRenderer);
+
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+
+animate();
 </script>
 
 </body>
