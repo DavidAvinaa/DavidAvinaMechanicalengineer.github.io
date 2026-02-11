@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-<title>Erick David Aviña Morales | Project Manager</title>
+<title>Erick David Aviña Morales | Mechanical Engineer</title>
 
 <script type="importmap">
 {
@@ -20,61 +19,58 @@
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background: linear-gradient(135deg, #1e3799, #0c2461);
-  color: white;
+  background: #f5f6f7;
+  color: #2c3e50;
 }
 
-/* ===== TARJETA PRINCIPAL ===== */
+/* ===== TARJETA SUPERIOR ===== */
 
 .business-card {
-  max-width: 900px;
-  margin: 40px auto;
+  max-width: 1000px;
+  margin: 40px auto 20px auto;
   background: white;
-  color: #2c3e50;
-  border-radius: 20px;
-  padding: 40px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  border-radius: 16px;
+  padding: 40px 20px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
   text-align: center;
 }
 
 .profile-img {
-  width: 160px;
-  height: 160px;
+  width: 170px;
+  height: 170px;
   border-radius: 50%;
   object-fit: cover;
   border: 6px solid #1e3799;
   margin-bottom: 20px;
 }
 
-h1 {
-  margin: 10px 0;
+.business-card h1 {
   color: #1e3799;
-  font-size: 28px;
+  margin: 10px 0;
 }
 
 .position {
   font-size: 18px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-top: 5px;
 }
 
 .career {
   font-size: 15px;
-  margin-bottom: 25px;
+  margin-top: 8px;
   color: #555;
 }
 
 .contact-info {
-  margin-top: 15px;
-  font-size: 16px;
+  margin-top: 20px;
 }
 
 .contact-info a {
   display: block;
-  margin: 8px 0;
   text-decoration: none;
   color: #1e3799;
   font-weight: bold;
+  margin: 6px 0;
 }
 
 .contact-info a:hover {
@@ -86,17 +82,22 @@ h1 {
 .container {
   max-width: 1000px;
   margin: auto;
-  padding: 40px 20px;
+  padding: 20px;
+}
+
+.container h1 {
+  color: #1e3799;
+  margin-top: 40px;
 }
 
 h2 {
   color: #1e3799;
+  margin-top: 35px;
 }
 
 p {
-  line-height: 1.6;
+  line-height: 1.7;
   font-size: 16px;
-  color: #333;
 }
 
 #viewer {
@@ -104,25 +105,14 @@ p {
   height: 600px;
   background: linear-gradient(180deg, #f2f2f2, #dcdcdc);
   border-radius: 12px;
-  margin-top: 40px;
+  margin-top: 30px;
 }
 
-/* ===== RESPONSIVE ===== */
-
+/* RESPONSIVE */
 @media (max-width: 768px) {
-
-  .business-card {
-    padding: 25px;
-  }
-
   #viewer {
     height: 420px;
   }
-
-  h1 {
-    font-size: 22px;
-  }
-
 }
 
 </style>
@@ -130,7 +120,8 @@ p {
 
 <body>
 
-<!-- 🔥 TARJETA DIGITAL -->
+<!-- ===== TARJETA ===== -->
+
 <div class="business-card">
 
   <img src="foto.jpg" alt="Erick David Aviña Morales" class="profile-img">
@@ -150,24 +141,34 @@ p {
 
 </div>
 
+<!-- ===== CONTENIDO PROFESIONAL ===== -->
 
-<!-- CONTENIDO PROFESIONAL -->
 <div class="container">
 
-  <h2>Professional Summary</h2>
+  <h1>David Aviña Mechanical Engineer</h1>
 
   <p>
-    Mechanical Engineer with experience in project management and engineering design.
-    Specialized in structural and energy-related projects, focused on efficiency, safety,
-    and high-quality technical solutions. Strong experience leading teams and developing
-    fabrication drawings using SolidWorks, AutoCAD and CATIA.
+    I am David Aviña, a Mechanical Engineer with experience in project management
+    and engineering design. I have worked on structural and energy-related projects,
+    focused on efficiency, quality, safety, and technical problem solving, with a strong
+    interest in continuous improvement, teamwork, and delivering reliable engineering
+    solutions worldwide.
+  </p>
+
+  <h2>Project Management Experience</h2>
+
+  <p>
+    I have led multiple engineering projects as a <strong>Project Manager</strong>,
+    overseeing each phase from initial planning to final delivery. In addition to project
+    coordination and technical decision-making, I am also responsible for
+    <strong>Engineering Design</strong> and the development of fabrication drawings
+    using software such as SolidWorks, AutoCAD, and CATIA.
   </p>
 
   <h2>3D Model – CORE-LOC</h2>
   <div id="viewer"></div>
 
 </div>
-
 
 <script type="module">
 import * as THREE from "three";
@@ -179,6 +180,7 @@ const container = document.getElementById("viewer");
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xf0f0f0);
 
+/* ===== CÁMARA ===== */
 const camera = new THREE.PerspectiveCamera(
   60,
   container.clientWidth / container.clientHeight,
@@ -193,15 +195,35 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 container.appendChild(renderer.domElement);
 
+/* ===== CONTROLES ===== */
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.enablePan = false;
+controls.rotateSpeed = 0.8;
+
+/* ===== ILUMINACIÓN PROFESIONAL ===== */
 
 scene.add(new THREE.AmbientLight(0xffffff, 0.4));
 
-const light = new THREE.DirectionalLight(0xffffff, 1.1);
-light.position.set(300, 300, 300);
-scene.add(light);
+const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
+keyLight.position.set(300, 300, 300);
+keyLight.castShadow = true;
+keyLight.shadow.mapSize.set(2048, 2048);
+scene.add(keyLight);
+
+const fillLight = new THREE.DirectionalLight(0xffffff, 0.5);
+fillLight.position.set(-300, 150, 200);
+scene.add(fillLight);
+
+const rimLight = new THREE.DirectionalLight(0xffffff, 0.8);
+rimLight.position.set(-200, 250, -300);
+scene.add(rimLight);
+
+const bottomLight = new THREE.DirectionalLight(0xffffff, 0.3);
+bottomLight.position.set(0, -300, 0);
+scene.add(bottomLight);
+
+/* ===== CARGA STL ===== */
 
 const loader = new STLLoader();
 loader.load("./models/CORE-LOC.stl", (geometry) => {
@@ -211,11 +233,13 @@ loader.load("./models/CORE-LOC.stl", (geometry) => {
 
   const material = new THREE.MeshStandardMaterial({
     color: 0x1565c0,
-    metalness: 0.25,
-    roughness: 0.45
+    metalness: 0.35,
+    roughness: 0.4
   });
 
   const mesh = new THREE.Mesh(geometry, material);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
   scene.add(mesh);
 
   const box = new THREE.Box3().setFromObject(mesh);
