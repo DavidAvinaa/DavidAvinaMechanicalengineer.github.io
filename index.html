@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -7,25 +8,12 @@
 
 <title>David Aviña Mechanical Engineer</title>
 
-<script type="importmap">
-{
-"imports":{
-"three":"https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js"
-}
-}
-</script>
-
 <style>
 
 body{
 margin:0;
 font-family:Arial, Helvetica, sans-serif;
-background:#f5f6f7;
-color:#2c3e50;
-scroll-behavior:smooth;
 }
-
-/* HERO */
 
 .hero{
 height:100vh;
@@ -40,8 +28,8 @@ padding:20px;
 }
 
 .profile-img{
-width:230px;
-height:230px;
+width:240px;
+height:240px;
 border-radius:50%;
 object-fit:cover;
 border:6px solid white;
@@ -55,10 +43,8 @@ font-size:30px;
 
 .hero p{
 margin:6px 0;
-font-size:17px;
+font-size:18px;
 }
-
-/* BUTTONS */
 
 .buttons{
 margin-top:30px;
@@ -79,67 +65,11 @@ border-radius:8px;
 background:#dfe4ea;
 }
 
-/* CONTENT */
-
-.container{
-max-width:1000px;
-margin:auto;
-padding:70px 20px;
-}
-
-h1,h2,h3{
-color:#1e3799;
-}
-
-p{
-line-height:1.7;
-}
-
-/* PROJECT BUTTONS */
-
-.project-button{
-width:100%;
-padding:18px;
-margin-top:15px;
-font-size:17px;
-background:#1e3799;
-color:white;
-border:none;
-border-radius:6px;
-cursor:pointer;
-text-align:left;
-}
-
-.project-button:hover{
-background:#0c2461;
-}
-
-.project-content{
-display:none;
-padding:25px;
-background:white;
-border-radius:6px;
-margin-bottom:20px;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
-}
-
-/* STL */
-
-#viewer{
-width:100%;
-height:500px;
-background:linear-gradient(180deg,#f2f2f2,#dcdcdc);
-border-radius:12px;
-margin-top:20px;
-}
-
 </style>
 
 </head>
 
 <body>
-
-<!-- CARD -->
 
 <section class="hero">
 
@@ -155,190 +85,13 @@ margin-top:20px;
 
 <div class="buttons">
 
-<a href="#portfolio">Engineering Portfolio</a>
+<a href="portfolio.html">Engineering Portfolio</a>
 
-<a href="#education">Academic Background</a>
+<a href="education.html">Academic Background</a>
 
 </div>
 
 </section>
 
-<!-- PORTFOLIO -->
-
-<div class="container" id="portfolio">
-
-<h1>David Aviña</h1>
-<h2>Mechanical Engineer</h2>
-
-<p>
-I am David Aviña, a Mechanical Engineer with experience in project management
-and engineering design, focused on structural engineering projects,
-technical problem solving, and engineering coordination.
-</p>
-
-<h2>Project Management Experience</h2>
-
-<p>
-Below are some engineering projects where I led project coordination,
-engineering design, and technical development.
-</p>
-
-<!-- PROJECT 1 -->
-
-<button class="project-button" onclick="toggleProject('p1')">
-IMSS Clinic 25 Structural Project
-</button>
-
-<div class="project-content" id="p1">
-
-<h3>IMSS Clinic 25 Structural Project</h3>
-
-<p>
-Project description will be added here.
-</p>
-
-</div>
-
-<!-- PROJECT 2 -->
-
-<button class="project-button" onclick="toggleProject('p2')">
-CORE-LOC Offshore Structure
-</button>
-
-<div class="project-content" id="p2">
-
-<h3>CORE-LOC Coastal Protection Structure</h3>
-
-<p>
-Engineering modeling and analysis of CORE-LOC coastal breakwater units.
-</p>
-
-<div id="viewer"></div>
-
-</div>
-
-<!-- PROJECT 3 -->
-
-<button class="project-button" onclick="toggleProject('p3')">
-Valle de Bravo Residential Structure
-</button>
-
-<div class="project-content" id="p3">
-
-<h3>Valle de Bravo Residential Steel Structure</h3>
-
-<p>
-Structural design and fabrication planning for a residential steel structure.
-</p>
-
-</div>
-
-</div>
-
-<!-- EDUCATION -->
-
-<div class="container" id="education">
-
-<h2>Academic Background</h2>
-
-<p>
-Bachelor’s Degree in Mechanical and Energy Systems Engineering.
-</p>
-
-</div>
-
-<script type="module">
-
-import * as THREE from "three";
-import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js";
-import { STLLoader } from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/STLLoader.js";
-
-let viewerLoaded=false;
-
-window.toggleProject=function(id){
-
-const section=document.getElementById(id);
-
-if(section.style.display==="block"){
-section.style.display="none";
-}else{
-section.style.display="block";
-
-if(id==="p2" && !viewerLoaded){
-initSTL();
-viewerLoaded=true;
-}
-
-}
-
-}
-
-function initSTL(){
-
-const container=document.getElementById("viewer");
-
-const scene=new THREE.Scene();
-scene.background=new THREE.Color(0xf0f0f0);
-
-const camera=new THREE.PerspectiveCamera(
-60,
-container.clientWidth/container.clientHeight,
-0.1,
-5000
-);
-
-const renderer=new THREE.WebGLRenderer({antialias:true});
-renderer.setSize(container.clientWidth,container.clientHeight);
-container.appendChild(renderer.domElement);
-
-const controls=new OrbitControls(camera,renderer.domElement);
-controls.enableDamping=true;
-
-scene.add(new THREE.AmbientLight(0xffffff,0.6));
-
-const light=new THREE.DirectionalLight(0xffffff,1);
-light.position.set(300,300,300);
-scene.add(light);
-
-const loader=new STLLoader();
-
-loader.load("./models/CORE-LOC.stl",(geometry)=>{
-
-geometry.center();
-
-const material=new THREE.MeshStandardMaterial({
-color:0x1565c0,
-metalness:0.4,
-roughness:0.35
-});
-
-const mesh=new THREE.Mesh(geometry,material);
-scene.add(mesh);
-
-const box=new THREE.Box3().setFromObject(mesh);
-const size=box.getSize(new THREE.Vector3()).length();
-const center=box.getCenter(new THREE.Vector3());
-
-controls.target.copy(center);
-
-camera.position.set(size*0.9,size*0.8,size*0.9);
-
-controls.update();
-
-});
-
-function animate(){
-requestAnimationFrame(animate);
-controls.update();
-renderer.render(scene,camera);
-}
-
-animate();
-
-}
-
-</script>
-
 </body>
 </html>
-
