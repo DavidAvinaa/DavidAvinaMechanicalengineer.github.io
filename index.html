@@ -1,231 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<title>David Aviña Mechanical Engineer</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Professional Experience</title>
 
 <script type="importmap">
 {
-  "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js"
-  }
+"imports":{
+"three":"https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js"
+}
 }
 </script>
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f5f6f7; /* Fondo claro original */
-  color: #2c3e50;
+
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+background:#f5f6f7;
+color:#2c3e50;
 }
 
-/* ===== HERO FULL SCREEN ===== */
-.hero {
-  height: 100vh;
-  background: linear-gradient(135deg, #1e3799, #0c2461);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 20px;
-  color: white;
+.container{
+max-width:1000px;
+margin:auto;
+padding:40px 20px;
 }
 
-.profile-img {
-  width: 230px;
-  height: 230px;
-  border-radius: 50%;
-  object-fit: cover;
-  object-position: center;
-  border: 6px solid white;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-  margin-bottom: 25px;
+h1,h2{
+color:#1e3799;
 }
 
-.hero h1 {
-  margin: 10px 0;
-  font-size: 28px;
+p{
+line-height:1.7;
+font-size:16px;
 }
 
-.hero p {
-  margin: 6px 0;
-  font-size: 16px;
+#viewer{
+width:100%;
+height:600px;
+background:linear-gradient(180deg,#f2f2f2,#dcdcdc);
+border-radius:12px;
+margin-top:30px;
 }
 
-/* ===== CONTENIDO ===== */
-
-.container {
-  max-width: 1000px;
-  margin: auto;
-  padding: 40px 20px;
+.back{
+display:inline-block;
+margin-bottom:30px;
+text-decoration:none;
+color:white;
+background:#1e3799;
+padding:10px 18px;
+border-radius:6px;
 }
 
-.container h1 {
-  color: #1e3799;
+.back:hover{
+background:#0c2461;
 }
 
-h2 {
-  color: #1e3799;
-  margin-top: 40px;
+@media (max-width:768px){
+#viewer{
+height:420px;
+}
 }
 
-p {
-  line-height: 1.7;
-  font-size: 16px;
-}
-
-#viewer {
-  width: 100%;
-  height: 600px;
-  background: linear-gradient(180deg, #f2f2f2, #dcdcdc);
-  border-radius: 12px;
-  margin-top: 30px;
-}
-
-@media (max-width: 768px) {
-  #viewer {
-    height: 420px;
-  }
-}
 </style>
 </head>
 
 <body>
 
-<!-- ===== HERO CONTACTO FULL SCREEN ===== -->
-<section class="hero">
-
-  <img src="foto.jpg" alt="David Aviña" class="profile-img">
-
-  <h1>ERICK DAVID AVIÑA MORALES</h1>
-  <p><strong>Project Manager / Design Engineer</strong></p>
-  <p>Ingeniero Mecánico y en Sistemas Energéticos</p>
-  <p>📱 55 8056 2436</p>
-  <p>📧 davidavina_@hotmail.com</p>
-
-</section>
-
-<!-- ===== CONTENIDO PROFESIONAL ===== -->
 <div class="container">
 
-  <h1>David Aviña Mechanical Engineer</h1>
+<a href="index.html" class="back">⬅ Back</a>
 
-  <p>
-    I am David Aviña, a Mechanical Engineer with experience in project management
-    and engineering design. I have worked on structural and energy-related projects,
-    focused on efficiency, quality, safety, and technical problem solving, with a strong
-    interest in continuous improvement, teamwork, and delivering reliable engineering
-    solutions worldwide.
-  </p>
+<h1>David Aviña Mechanical Engineer</h1>
 
-  <h2>Project Management Experience</h2>
+<p>
+I am David Aviña, a Mechanical Engineer with experience in project management
+and engineering design. I have worked on structural and energy-related projects,
+focused on efficiency, quality, safety, and technical problem solving, with a strong
+interest in continuous improvement, teamwork, and delivering reliable engineering
+solutions worldwide.
+</p>
 
-  <p>
-    I have led multiple engineering projects as a <strong>Project Manager</strong>,
-    overseeing each phase from initial planning to final delivery. In addition to project
-    coordination and technical decision-making, I am also responsible for
-    <strong>Engineering Design</strong> and the development of fabrication drawings
-    using software such as SolidWorks, AutoCAD, and CATIA.
-  </p>
+<h2>Project Management Experience</h2>
 
-  <h2>3D Model – CORE-LOC</h2>
-  <div id="viewer"></div>
+<p>
+I have led multiple engineering projects as a <strong>Project Manager</strong>,
+overseeing each phase from initial planning to final delivery. In addition to project
+coordination and technical decision-making, I am also responsible for
+<strong>Engineering Design</strong> and the development of fabrication drawings
+using software such as SolidWorks, AutoCAD, and CATIA.
+</p>
+
+<h2>3D Model – CORE-LOC</h2>
+
+<div id="viewer"></div>
 
 </div>
 
 <script type="module">
+
 import * as THREE from "three";
 import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js";
 import { STLLoader } from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/STLLoader.js";
 
-const container = document.getElementById("viewer");
+const container=document.getElementById("viewer");
 
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xf0f0f0);
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0xf0f0f0);
 
-const camera = new THREE.PerspectiveCamera(
-  60,
-  container.clientWidth / container.clientHeight,
-  0.1,
-  5000
+const camera=new THREE.PerspectiveCamera(
+60,
+container.clientWidth/container.clientHeight,
+0.1,
+5000
 );
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(container.clientWidth, container.clientHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(container.clientWidth,container.clientHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.shadowMap.enabled=true;
+
 container.appendChild(renderer.domElement);
 
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.enablePan = false;
-controls.rotateSpeed = 0.8;
+const controls=new OrbitControls(camera,renderer.domElement);
+controls.enableDamping=true;
+controls.enablePan=false;
 
-/* ===== ILUMINACIÓN MEJORADA ===== */
+/* LUCES */
 
-scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+scene.add(new THREE.AmbientLight(0xffffff,0.5));
 
-const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
-keyLight.position.set(300, 300, 300);
+const keyLight=new THREE.DirectionalLight(0xffffff,1.2);
+keyLight.position.set(300,300,300);
 scene.add(keyLight);
 
-const fillLight = new THREE.DirectionalLight(0xffffff, 0.6);
-fillLight.position.set(-300, 150, 200);
+const fillLight=new THREE.DirectionalLight(0xffffff,0.6);
+fillLight.position.set(-300,150,200);
 scene.add(fillLight);
 
-const rimLight = new THREE.DirectionalLight(0xffffff, 0.8);
-rimLight.position.set(-200, 250, -300);
+const rimLight=new THREE.DirectionalLight(0xffffff,0.8);
+rimLight.position.set(-200,250,-300);
 scene.add(rimLight);
 
-/* ===== STL ===== */
+/* STL */
 
-const loader = new STLLoader();
-loader.load("./models/CORE-LOC.stl", (geometry) => {
+const loader=new STLLoader();
 
-  geometry.center();
-  geometry.computeVertexNormals();
+loader.load("./models/CORE-LOC.stl",(geometry)=>{
 
-  const material = new THREE.MeshStandardMaterial({
-    color: 0x1565c0,
-    metalness: 0.4,
-    roughness: 0.35
-  });
+geometry.center();
+geometry.computeVertexNormals();
 
-  const mesh = new THREE.Mesh(geometry, material);
-  scene.add(mesh);
-
-  const box = new THREE.Box3().setFromObject(mesh);
-  const size = box.getSize(new THREE.Vector3()).length();
-  const center = box.getCenter(new THREE.Vector3());
-
-  controls.target.copy(center);
-  camera.position.set(size * 0.9, size * 0.8, size * 0.9);
-  camera.lookAt(center);
-  controls.update();
+const material=new THREE.MeshStandardMaterial({
+color:0x1565c0,
+metalness:0.4,
+roughness:0.35
 });
 
-function resizeRenderer() {
-  const width = container.clientWidth;
-  const height = container.clientHeight;
-  camera.aspect = width / height;
-  camera.updateProjectionMatrix();
-  renderer.setSize(width, height);
+const mesh=new THREE.Mesh(geometry,material);
+scene.add(mesh);
+
+const box=new THREE.Box3().setFromObject(mesh);
+const size=box.getSize(new THREE.Vector3()).length();
+const center=box.getCenter(new THREE.Vector3());
+
+controls.target.copy(center);
+camera.position.set(size*0.9,size*0.8,size*0.9);
+camera.lookAt(center);
+
+controls.update();
+
+});
+
+function resizeRenderer(){
+
+const width=container.clientWidth;
+const height=container.clientHeight;
+
+camera.aspect=width/height;
+camera.updateProjectionMatrix();
+renderer.setSize(width,height);
+
 }
 
-window.addEventListener("resize", resizeRenderer);
+window.addEventListener("resize",resizeRenderer);
 
-function animate() {
-  requestAnimationFrame(animate);
-  controls.update();
-  renderer.render(scene, camera);
+function animate(){
+requestAnimationFrame(animate);
+controls.update();
+renderer.render(scene,camera);
 }
 
 animate();
+
 </script>
 
 </body>
