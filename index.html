@@ -25,7 +25,7 @@ color:#2c3e50;
 scroll-behavior:smooth;
 }
 
-/* HERO */
+/* HERO CARD */
 
 .hero{
 height:100vh;
@@ -35,18 +35,16 @@ flex-direction:column;
 justify-content:center;
 align-items:center;
 text-align:center;
-padding:20px;
 color:white;
+padding:20px;
 }
 
 .profile-img{
-width:240px;
-height:240px;
+width:230px;
+height:230px;
 border-radius:50%;
 object-fit:cover;
-object-position:center;
 border:6px solid white;
-box-shadow:0 10px 30px rgba(0,0,0,0.3);
 margin-bottom:25px;
 }
 
@@ -60,7 +58,7 @@ margin:6px 0;
 font-size:17px;
 }
 
-/* BOTONES */
+/* BUTTONS */
 
 .buttons{
 margin-top:30px;
@@ -82,21 +80,16 @@ transition:0.3s;
 background:#dfe4ea;
 }
 
-/* CONTENIDO */
+/* CONTAINER */
 
 .container{
 max-width:1000px;
 margin:auto;
-padding:60px 20px;
+padding:70px 20px;
 }
 
-.container h1{
+h1,h2,h3{
 color:#1e3799;
-}
-
-h2{
-color:#1e3799;
-margin-top:40px;
 }
 
 p{
@@ -104,36 +97,60 @@ line-height:1.7;
 font-size:16px;
 }
 
-/* STL */
+/* PROJECT BUTTONS */
+
+.project-button{
+width:100%;
+padding:18px;
+margin-top:15px;
+font-size:17px;
+background:#1e3799;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+text-align:left;
+}
+
+.project-button:hover{
+background:#0c2461;
+}
+
+/* PROJECT CONTENT */
+
+.project-content{
+display:none;
+padding:25px;
+background:white;
+border-radius:6px;
+margin-bottom:20px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* STL VIEWER */
 
 #viewer{
 width:100%;
-height:600px;
+height:500px;
 background:linear-gradient(180deg,#f2f2f2,#dcdcdc);
 border-radius:12px;
-margin-top:30px;
+margin-top:20px;
 }
 
 @media (max-width:768px){
 
 #viewer{
-height:420px;
-}
-
-.profile-img{
-width:200px;
-height:200px;
+height:380px;
 }
 
 }
 
 </style>
-
 </head>
 
 <body>
 
-<!-- HERO -->
+<!-- HOME CARD -->
 
 <section class="hero">
 
@@ -149,7 +166,7 @@ height:200px;
 
 <div class="buttons">
 
-<a href="#experience">Professional Experience</a>
+<a href="#portfolio">Engineering Portfolio</a>
 
 <a href="#education">Academic Background</a>
 
@@ -157,33 +174,87 @@ height:200px;
 
 </section>
 
-<!-- EXPERIENCE -->
+<!-- PORTFOLIO -->
 
-<div class="container" id="experience">
+<div class="container" id="portfolio">
 
-<h1>David Aviña Mechanical Engineer</h1>
+<h1>David Aviña</h1>
+<h2>Mechanical Engineer</h2>
 
 <p>
 I am David Aviña, a Mechanical Engineer with experience in project management
 and engineering design. I have worked on structural and energy-related projects,
-focused on efficiency, quality, safety, and technical problem solving, with a strong
-interest in continuous improvement, teamwork, and delivering reliable engineering
-solutions worldwide.
+focused on efficiency, quality, safety, and technical problem solving.
 </p>
 
 <h2>Project Management Experience</h2>
 
 <p>
-I have led multiple engineering projects as a <strong>Project Manager</strong>,
-overseeing each phase from initial planning to final delivery. In addition to project
-coordination and technical decision-making, I am also responsible for
-<strong>Engineering Design</strong> and the development of fabrication drawings
-using software such as SolidWorks, AutoCAD, and CATIA.
+I have led multiple engineering projects as a Project Manager, overseeing
+planning, engineering design, fabrication, and final delivery. Below are
+some of the projects where I led engineering coordination and design
+development.
 </p>
 
-<h2>3D Model – CORE-LOC</h2>
+<!-- PROJECT 1 -->
+
+<button class="project-button" onclick="toggleProject('p1')">
+IMSS Clinic 25 Structural Project
+</button>
+
+<div class="project-content" id="p1">
+
+<h3>IMSS Clinic 25 Structural Project</h3>
+
+<p>
+Project description will be added here. This section will describe the
+engineering scope, project management role, structural design challenges,
+and the technical solutions implemented during the development of the project.
+</p>
+
+</div>
+
+<!-- PROJECT 2 -->
+
+<button class="project-button" onclick="toggleProject('p2')">
+CORE-LOC Offshore Structure
+</button>
+
+<div class="project-content" id="p2">
+
+<h3>CORE-LOC Offshore Concrete Structure</h3>
+
+<p>
+This project involved engineering analysis and modeling of a CORE-LOC
+coastal protection structure used in offshore breakwaters.
+The project included design review, geometry validation,
+and digital modeling for structural evaluation.
+</p>
+
+<h3>3D Model</h3>
 
 <div id="viewer"></div>
+
+</div>
+
+<!-- PROJECT 3 -->
+
+<button class="project-button" onclick="toggleProject('p3')">
+Valle de Bravo Residential Steel Structure
+</button>
+
+<div class="project-content" id="p3">
+
+<h3>Valle de Bravo Residential Structure</h3>
+
+<p>
+This project involved the structural design and fabrication planning
+of a steel structure for a residential construction located in
+Valle de Bravo. The work included structural layout, load
+considerations, and fabrication drawings for construction.
+</p>
+
+</div>
 
 </div>
 
@@ -195,8 +266,8 @@ using software such as SolidWorks, AutoCAD, and CATIA.
 
 <p>
 Bachelor’s Degree in Mechanical and Energy Systems Engineering.
-Focused on engineering design, thermodynamics, energy systems,
-and mechanical project development.
+Focused on mechanical design, thermodynamics, energy systems,
+and engineering project development.
 </p>
 
 </div>
@@ -207,7 +278,25 @@ import * as THREE from "three";
 import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js";
 import { STLLoader } from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/STLLoader.js";
 
+/* ACCORDION */
+
+window.toggleProject=function(id){
+
+const section=document.getElementById(id);
+
+if(section.style.display==="block"){
+section.style.display="none";
+}else{
+section.style.display="block";
+}
+
+}
+
+/* STL */
+
 const container=document.getElementById("viewer");
+
+if(container){
 
 const scene=new THREE.Scene();
 scene.background=new THREE.Color(0xf0f0f0);
@@ -221,39 +310,22 @@ container.clientWidth/container.clientHeight,
 
 const renderer=new THREE.WebGLRenderer({antialias:true});
 renderer.setSize(container.clientWidth,container.clientHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-renderer.shadowMap.enabled=true;
-
 container.appendChild(renderer.domElement);
 
 const controls=new OrbitControls(camera,renderer.domElement);
 controls.enableDamping=true;
-controls.enablePan=false;
 
-/* LUCES */
+scene.add(new THREE.AmbientLight(0xffffff,0.6));
 
-scene.add(new THREE.AmbientLight(0xffffff,0.5));
-
-const keyLight=new THREE.DirectionalLight(0xffffff,1.2);
-keyLight.position.set(300,300,300);
-scene.add(keyLight);
-
-const fillLight=new THREE.DirectionalLight(0xffffff,0.6);
-fillLight.position.set(-300,150,200);
-scene.add(fillLight);
-
-const rimLight=new THREE.DirectionalLight(0xffffff,0.8);
-rimLight.position.set(-200,250,-300);
-scene.add(rimLight);
-
-/* STL */
+const light=new THREE.DirectionalLight(0xffffff,1);
+light.position.set(300,300,300);
+scene.add(light);
 
 const loader=new STLLoader();
 
 loader.load("./models/CORE-LOC.stl",(geometry)=>{
 
 geometry.center();
-geometry.computeVertexNormals();
 
 const material=new THREE.MeshStandardMaterial({
 color:0x1565c0,
@@ -272,38 +344,22 @@ controls.target.copy(center);
 
 camera.position.set(size*0.9,size*0.8,size*0.9);
 
-camera.lookAt(center);
-
 controls.update();
 
 });
 
-function resizeRenderer(){
-
-const width=container.clientWidth;
-const height=container.clientHeight;
-
-camera.aspect=width/height;
-camera.updateProjectionMatrix();
-renderer.setSize(width,height);
-
-}
-
-window.addEventListener("resize",resizeRenderer);
-
 function animate(){
-
 requestAnimationFrame(animate);
-
 controls.update();
-
 renderer.render(scene,camera);
-
 }
 
 animate();
+
+}
 
 </script>
 
 </body>
 </html>
+
