@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Professional Experience</title>
+<title>David Aviña Mechanical Engineer</title>
 
 <script type="importmap">
 {
@@ -22,22 +22,89 @@ margin:0;
 font-family:Arial, Helvetica, sans-serif;
 background:#f5f6f7;
 color:#2c3e50;
+scroll-behavior:smooth;
 }
+
+/* HERO */
+
+.hero{
+height:100vh;
+background:linear-gradient(135deg,#1e3799,#0c2461);
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:20px;
+color:white;
+}
+
+.profile-img{
+width:240px;
+height:240px;
+border-radius:50%;
+object-fit:cover;
+object-position:center;
+border:6px solid white;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+margin-bottom:25px;
+}
+
+.hero h1{
+margin:10px 0;
+font-size:30px;
+}
+
+.hero p{
+margin:6px 0;
+font-size:17px;
+}
+
+/* BOTONES */
+
+.buttons{
+margin-top:30px;
+}
+
+.buttons a{
+display:inline-block;
+padding:14px 28px;
+margin:10px;
+background:white;
+color:#1e3799;
+font-weight:bold;
+text-decoration:none;
+border-radius:8px;
+transition:0.3s;
+}
+
+.buttons a:hover{
+background:#dfe4ea;
+}
+
+/* CONTENIDO */
 
 .container{
 max-width:1000px;
 margin:auto;
-padding:40px 20px;
+padding:60px 20px;
 }
 
-h1,h2{
+.container h1{
 color:#1e3799;
+}
+
+h2{
+color:#1e3799;
+margin-top:40px;
 }
 
 p{
 line-height:1.7;
 font-size:16px;
 }
+
+/* STL */
 
 #viewer{
 width:100%;
@@ -47,34 +114,52 @@ border-radius:12px;
 margin-top:30px;
 }
 
-.back{
-display:inline-block;
-margin-bottom:30px;
-text-decoration:none;
-color:white;
-background:#1e3799;
-padding:10px 18px;
-border-radius:6px;
-}
-
-.back:hover{
-background:#0c2461;
-}
-
 @media (max-width:768px){
+
 #viewer{
 height:420px;
 }
+
+.profile-img{
+width:200px;
+height:200px;
+}
+
 }
 
 </style>
+
 </head>
 
 <body>
 
-<div class="container">
+<!-- HERO -->
 
-<a href="index.html" class="back">⬅ Back</a>
+<section class="hero">
+
+<img src="foto.jpg" alt="David Aviña" class="profile-img">
+
+<h1>ERICK DAVID AVIÑA MORALES</h1>
+
+<p><strong>Project Manager / Design Engineer</strong></p>
+
+<p>Mechanical and Energy Systems Engineer</p>
+
+<p>📧 davidavina_@hotmail.com</p>
+
+<div class="buttons">
+
+<a href="#experience">Professional Experience</a>
+
+<a href="#education">Academic Background</a>
+
+</div>
+
+</section>
+
+<!-- EXPERIENCE -->
+
+<div class="container" id="experience">
 
 <h1>David Aviña Mechanical Engineer</h1>
 
@@ -99,6 +184,20 @@ using software such as SolidWorks, AutoCAD, and CATIA.
 <h2>3D Model – CORE-LOC</h2>
 
 <div id="viewer"></div>
+
+</div>
+
+<!-- EDUCATION -->
+
+<div class="container" id="education">
+
+<h2>Academic Background</h2>
+
+<p>
+Bachelor’s Degree in Mechanical and Energy Systems Engineering.
+Focused on engineering design, thermodynamics, energy systems,
+and mechanical project development.
+</p>
 
 </div>
 
@@ -170,7 +269,9 @@ const size=box.getSize(new THREE.Vector3()).length();
 const center=box.getCenter(new THREE.Vector3());
 
 controls.target.copy(center);
+
 camera.position.set(size*0.9,size*0.8,size*0.9);
+
 camera.lookAt(center);
 
 controls.update();
@@ -191,9 +292,13 @@ renderer.setSize(width,height);
 window.addEventListener("resize",resizeRenderer);
 
 function animate(){
+
 requestAnimationFrame(animate);
+
 controls.update();
+
 renderer.render(scene,camera);
+
 }
 
 animate();
