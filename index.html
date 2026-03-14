@@ -25,7 +25,7 @@ color:#2c3e50;
 scroll-behavior:smooth;
 }
 
-/* HERO CARD */
+/* HERO */
 
 .hero{
 height:100vh;
@@ -73,14 +73,13 @@ color:#1e3799;
 font-weight:bold;
 text-decoration:none;
 border-radius:8px;
-transition:0.3s;
 }
 
 .buttons a:hover{
 background:#dfe4ea;
 }
 
-/* CONTAINER */
+/* CONTENT */
 
 .container{
 max-width:1000px;
@@ -94,7 +93,6 @@ color:#1e3799;
 
 p{
 line-height:1.7;
-font-size:16px;
 }
 
 /* PROJECT BUTTONS */
@@ -116,8 +114,6 @@ text-align:left;
 background:#0c2461;
 }
 
-/* PROJECT CONTENT */
-
 .project-content{
 display:none;
 padding:25px;
@@ -127,7 +123,7 @@ margin-bottom:20px;
 box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
-/* STL VIEWER */
+/* STL */
 
 #viewer{
 width:100%;
@@ -137,24 +133,17 @@ border-radius:12px;
 margin-top:20px;
 }
 
-@media (max-width:768px){
-
-#viewer{
-height:380px;
-}
-
-}
-
 </style>
+
 </head>
 
 <body>
 
-<!-- HOME CARD -->
+<!-- CARD -->
 
 <section class="hero">
 
-<img src="foto.jpg" alt="David Aviña" class="profile-img">
+<img src="foto.jpg" class="profile-img">
 
 <h1>ERICK DAVID AVIÑA MORALES</h1>
 
@@ -183,17 +172,15 @@ height:380px;
 
 <p>
 I am David Aviña, a Mechanical Engineer with experience in project management
-and engineering design. I have worked on structural and energy-related projects,
-focused on efficiency, quality, safety, and technical problem solving.
+and engineering design, focused on structural engineering projects,
+technical problem solving, and engineering coordination.
 </p>
 
 <h2>Project Management Experience</h2>
 
 <p>
-I have led multiple engineering projects as a Project Manager, overseeing
-planning, engineering design, fabrication, and final delivery. Below are
-some of the projects where I led engineering coordination and design
-development.
+Below are some engineering projects where I led project coordination,
+engineering design, and technical development.
 </p>
 
 <!-- PROJECT 1 -->
@@ -207,9 +194,7 @@ IMSS Clinic 25 Structural Project
 <h3>IMSS Clinic 25 Structural Project</h3>
 
 <p>
-Project description will be added here. This section will describe the
-engineering scope, project management role, structural design challenges,
-and the technical solutions implemented during the development of the project.
+Project description will be added here.
 </p>
 
 </div>
@@ -222,16 +207,11 @@ CORE-LOC Offshore Structure
 
 <div class="project-content" id="p2">
 
-<h3>CORE-LOC Offshore Concrete Structure</h3>
+<h3>CORE-LOC Coastal Protection Structure</h3>
 
 <p>
-This project involved engineering analysis and modeling of a CORE-LOC
-coastal protection structure used in offshore breakwaters.
-The project included design review, geometry validation,
-and digital modeling for structural evaluation.
+Engineering modeling and analysis of CORE-LOC coastal breakwater units.
 </p>
-
-<h3>3D Model</h3>
 
 <div id="viewer"></div>
 
@@ -240,18 +220,15 @@ and digital modeling for structural evaluation.
 <!-- PROJECT 3 -->
 
 <button class="project-button" onclick="toggleProject('p3')">
-Valle de Bravo Residential Steel Structure
+Valle de Bravo Residential Structure
 </button>
 
 <div class="project-content" id="p3">
 
-<h3>Valle de Bravo Residential Structure</h3>
+<h3>Valle de Bravo Residential Steel Structure</h3>
 
 <p>
-This project involved the structural design and fabrication planning
-of a steel structure for a residential construction located in
-Valle de Bravo. The work included structural layout, load
-considerations, and fabrication drawings for construction.
+Structural design and fabrication planning for a residential steel structure.
 </p>
 
 </div>
@@ -266,8 +243,6 @@ considerations, and fabrication drawings for construction.
 
 <p>
 Bachelor’s Degree in Mechanical and Energy Systems Engineering.
-Focused on mechanical design, thermodynamics, energy systems,
-and engineering project development.
 </p>
 
 </div>
@@ -278,7 +253,7 @@ import * as THREE from "three";
 import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js";
 import { STLLoader } from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/STLLoader.js";
 
-/* ACCORDION */
+let viewerLoaded=false;
 
 window.toggleProject=function(id){
 
@@ -288,15 +263,19 @@ if(section.style.display==="block"){
 section.style.display="none";
 }else{
 section.style.display="block";
+
+if(id==="p2" && !viewerLoaded){
+initSTL();
+viewerLoaded=true;
 }
 
 }
 
-/* STL */
+}
+
+function initSTL(){
 
 const container=document.getElementById("viewer");
-
-if(container){
 
 const scene=new THREE.Scene();
 scene.background=new THREE.Color(0xf0f0f0);
