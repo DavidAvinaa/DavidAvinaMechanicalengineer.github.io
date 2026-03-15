@@ -31,7 +31,7 @@ margin:auto;
 padding:60px 20px;
 }
 
-h1,h2{
+h1,h2,h3{
 color:#1e3799;
 }
 
@@ -63,8 +63,8 @@ box-shadow:0 5px 15px rgba(0,0,0,0.1);
 
 .viewer{
 width:100%;
-height:520px;
-background:#eaeaea;
+height:500px;
+background:linear-gradient(180deg,#f2f2f2,#dcdcdc);
 border-radius:10px;
 margin-top:20px;
 }
@@ -91,11 +91,17 @@ border-radius:6px;
 <h2>Mechanical Engineer</h2>
 
 <p>
-Mechanical and Energy Systems Engineer with experience in structural steel
-fabrication projects and engineering project management.
+Mechanical and Energy Systems Engineer with experience in engineering
+project management and structural steel fabrication projects including
+design coordination, manufacturing supervision and installation planning.
 </p>
 
 <h2>Project Management Experience</h2>
+
+<p>
+Below are selected engineering projects where I coordinated design,
+fabrication and installation processes.
+</p>
 
 <button class="project-button" onclick="toggleProject('p1')">
 IMSS Clinic 25 Structural Steel Project
@@ -104,8 +110,10 @@ IMSS Clinic 25 Structural Steel Project
 <div class="project-content" id="p1">
 
 <p>
-Structural steel project for IMSS hospital infrastructure including anchor
-bolt installation and fire protection coating systems.
+Structural steel fabrication and installation project for hospital
+infrastructure at IMSS Clinic 25. The project included anchor bolt
+installation, steel assembly coordination and application of
+fire-resistant intumescent coatings.
 </p>
 
 <div class="viewer" id="viewerIMSS"></div>
@@ -121,8 +129,10 @@ CORE-LOC Special Formwork System
 <div class="project-content" id="p2">
 
 <p>
-Manufacturing supervision of patented CORE-LOC formwork systems used in
-coastal protection engineering.
+Engineering management of the fabrication process for patented
+CORE-LOC formwork systems used in coastal protection structures.
+The project included supervision of manufacturing and validation
+of demolding functionality.
 </p>
 
 <div class="viewer" id="viewerCORE"></div>
@@ -138,8 +148,10 @@ Valle de Bravo Residential Steel Structure
 <div class="project-content" id="p3">
 
 <p>
-Structural steel fabrication and installation project for a residential
-construction located in Valle de Bravo.
+Project management of a structural steel system for residential
+construction in Valle de Bravo including fabrication planning,
+transport logistics and installation supervision of a suspended
+steel structure approximately 30 meters above ground level.
 </p>
 
 </div>
@@ -154,27 +166,25 @@ import * as THREE from "three";
 import {OrbitControls} from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js";
 import {STLLoader} from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/STLLoader.js";
 
+
 window.toggleProject=function(id){
 
 const section=document.getElementById(id);
 
 section.style.display =
-section.style.display==="block" ? "none":"block";
+section.style.display==="block" ? "none" : "block";
+
 
 if(id==="p1" && !window.imssLoaded){
 
-console.log("Loading IMSS STL");
-
-loadSTL("viewerIMSS","models/COLUMNAIMSS.stl");
+loadSTL("viewerIMSS","./models/COLUMNAIMSS.stl");
 window.imssLoaded=true;
 
 }
 
 if(id==="p2" && !window.coreLoaded){
 
-console.log("Loading CORELOC STL");
-
-loadSTL("viewerCORE","models/CORE-LOC.stl");
+loadSTL("viewerCORE","./models/CORE-LOC.stl");
 window.coreLoaded=true;
 
 }
@@ -182,11 +192,13 @@ window.coreLoaded=true;
 }
 
 
+
 function loadSTL(viewer,model){
 
 const container=document.getElementById(viewer);
 
 const scene=new THREE.Scene();
+scene.background=new THREE.Color(0xf0f0f0);
 
 const camera=new THREE.PerspectiveCamera(
 60,
@@ -205,36 +217,39 @@ controls.enableDamping=true;
 
 
 
-const ambient=new THREE.AmbientLight(0xffffff,0.6);
-scene.add(ambient);
+const ambientLight=new THREE.AmbientLight(0xffffff,0.5);
+scene.add(ambientLight);
 
-const light1=new THREE.DirectionalLight(0xffffff,1);
-light1.position.set(300,300,300);
-scene.add(light1);
+const keyLight=new THREE.DirectionalLight(0xffffff,1.2);
+keyLight.position.set(400,300,400);
+scene.add(keyLight);
 
-const light2=new THREE.DirectionalLight(0xffffff,0.6);
-light2.position.set(-300,200,100);
-scene.add(light2);
+const fillLight=new THREE.DirectionalLight(0xffffff,0.6);
+fillLight.position.set(-300,200,100);
+scene.add(fillLight);
+
+const rimLight=new THREE.DirectionalLight(0xffffff,0.8);
+rimLight.position.set(-200,200,-300);
+scene.add(rimLight);
+
+const topLight=new THREE.DirectionalLight(0xffffff,0.7);
+topLight.position.set(0,500,0);
+scene.add(topLight);
 
 
 
 const loader=new STLLoader();
 
-loader.load(
-
-model,
-
-function(geometry){
-
-console.log("STL Loaded:",model);
+loader.load(model,function(geometry){
 
 geometry.center();
+geometry.computeVertexNormals();
 
 const material=new THREE.MeshStandardMaterial({
 
-color:0x1565c0,
+color:0x1e6cff,
 metalness:0.5,
-roughness:0.3
+roughness:0.25
 
 });
 
@@ -242,22 +257,13 @@ const mesh=new THREE.Mesh(geometry,material);
 
 scene.add(mesh);
 
+
 const box=new THREE.Box3().setFromObject(mesh);
 const size=box.getSize(new THREE.Vector3()).length();
 
 camera.position.set(size,size,size);
 
-},
-
-undefined,
-
-function(error){
-
-console.error("Error loading STL:",error);
-
-}
-
-);
+});
 
 
 
