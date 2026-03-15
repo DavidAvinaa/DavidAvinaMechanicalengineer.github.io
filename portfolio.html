@@ -61,9 +61,9 @@ border-radius:6px;
 box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
-#viewer{
+.viewer{
 width:100%;
-height:550px;
+height:500px;
 background:linear-gradient(180deg,#f2f2f2,#dcdcdc);
 border-radius:10px;
 margin-top:20px;
@@ -91,17 +91,16 @@ border-radius:6px;
 <h2>Mechanical Engineer</h2>
 
 <p>
-Mechanical and Energy Systems Engineer with experience in engineering project
-management and structural steel projects. My work focuses on coordinating
-engineering design, fabrication processes, and multidisciplinary teams to
-deliver complex projects with strict quality and safety standards.
+Mechanical and Energy Systems Engineer with experience in engineering
+project management and structural steel fabrication projects including
+design coordination, manufacturing supervision and installation planning.
 </p>
 
 <h2>Project Management Experience</h2>
 
 <p>
-Below are selected engineering projects where I led planning,
-technical coordination, and project execution.
+Below are selected engineering projects where I coordinated design,
+fabrication and installation processes.
 </p>
 
 <button class="project-button" onclick="toggleProject('p1')">
@@ -111,14 +110,17 @@ IMSS Clinic 25 Structural Steel Project
 <div class="project-content" id="p1">
 
 <p>
-Engineering project involving structural steel fabrication and installation
-for hospital infrastructure at IMSS Clinic 25. The project included the
-installation of anchor bolt systems, coordination of structural components,
-and supervision of intumescent fire protection coatings to meet hospital
-construction safety regulations.
+Structural steel fabrication and installation project for hospital
+infrastructure at IMSS Clinic 25. The project included anchor bolt
+installation, steel assembly coordination and application of
+fire-resistant intumescent coatings.
 </p>
 
+<div class="viewer" id="viewerIMSS"></div>
+
 </div>
+
+
 
 <button class="project-button" onclick="toggleProject('p2')">
 CORE-LOC Special Formwork System
@@ -127,16 +129,17 @@ CORE-LOC Special Formwork System
 <div class="project-content" id="p2">
 
 <p>
-Management of the manufacturing process for patented CORE-LOC special
-formwork systems used in coastal protection structures. The project
-included supervision of fabrication processes, technical validation of
-demolding functionality, and quality control to ensure compliance with
-engineering specifications.
+Engineering management of the fabrication process for patented
+CORE-LOC formwork systems used in coastal protection structures.
+The project included supervision of manufacturing and validation
+of demolding functionality.
 </p>
 
-<div id="viewer"></div>
+<div class="viewer" id="viewerCORE"></div>
 
 </div>
+
+
 
 <button class="project-button" onclick="toggleProject('p3')">
 Valle de Bravo Residential Steel Structure
@@ -145,39 +148,54 @@ Valle de Bravo Residential Steel Structure
 <div class="project-content" id="p3">
 
 <p>
-Project management of a structural steel system for a residential
-construction located in Valle de Bravo. Responsibilities included
-planning fabrication, coordinating logistics, and supervising the
-installation of a suspended steel structure approximately
-30 meters above ground level.
+Project management of a structural steel system for residential
+construction in Valle de Bravo including fabrication planning,
+transport logistics and installation supervision of a suspended
+steel structure approximately 30 meters above ground level.
 </p>
 
 </div>
 
 </div>
 
+
+
 <script type="module">
 
 import * as THREE from "three";
-import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js";
-import { STLLoader } from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/STLLoader.js";
+import {OrbitControls} from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js";
+import {STLLoader} from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/STLLoader.js";
+
 
 window.toggleProject=function(id){
 
 const section=document.getElementById(id);
 
-section.style.display = section.style.display === "block" ? "none" : "block";
+section.style.display =
+section.style.display==="block" ? "none" : "block";
 
-if(id==="p2" && !window.viewerLoaded){
-initSTL();
-window.viewerLoaded=true;
+
+if(id==="p1" && !window.imssLoaded){
+
+loadSTL("viewerIMSS","./models/COLUMNAIMSS.stl");
+window.imssLoaded=true;
+
+}
+
+if(id==="p2" && !window.coreLoaded){
+
+loadSTL("viewerCORE","./models/CORE-LOC.stl");
+window.coreLoaded=true;
+
 }
 
 }
 
-function initSTL(){
 
-const container=document.getElementById("viewer");
+
+function loadSTL(viewer,model){
+
+const container=document.getElementById(viewer);
 
 const scene=new THREE.Scene();
 scene.background=new THREE.Color(0xf0f0f0);
@@ -195,49 +213,50 @@ renderer.setSize(container.clientWidth,container.clientHeight);
 container.appendChild(renderer.domElement);
 
 const controls=new OrbitControls(camera,renderer.domElement);
-
 controls.enableDamping=true;
 
 
-/* ===== ADVANCED LIGHTING ===== */
 
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+const ambientLight=new THREE.AmbientLight(0xffffff,0.5);
 scene.add(ambientLight);
 
-const keyLight = new THREE.DirectionalLight(0xffffff, 1.3);
+const keyLight=new THREE.DirectionalLight(0xffffff,1.2);
 keyLight.position.set(400,300,400);
 scene.add(keyLight);
 
-const fillLight = new THREE.DirectionalLight(0xffffff, 0.6);
-fillLight.position.set(-300,150,200);
+const fillLight=new THREE.DirectionalLight(0xffffff,0.6);
+fillLight.position.set(-300,200,100);
 scene.add(fillLight);
 
-const rimLight = new THREE.DirectionalLight(0xffffff, 0.9);
-rimLight.position.set(-200,250,-300);
+const rimLight=new THREE.DirectionalLight(0xffffff,0.8);
+rimLight.position.set(-200,200,-300);
 scene.add(rimLight);
 
-const topLight = new THREE.DirectionalLight(0xffffff, 0.7);
+const topLight=new THREE.DirectionalLight(0xffffff,0.7);
 topLight.position.set(0,500,0);
 scene.add(topLight);
 
 
-/* ===== STL LOADER ===== */
 
 const loader=new STLLoader();
 
-loader.load("./models/CORE-LOC.stl",(geometry)=>{
+loader.load(model,function(geometry){
 
 geometry.center();
 geometry.computeVertexNormals();
 
 const material=new THREE.MeshStandardMaterial({
+
 color:0x1e6cff,
 metalness:0.5,
 roughness:0.25
+
 });
 
 const mesh=new THREE.Mesh(geometry,material);
+
 scene.add(mesh);
+
 
 const box=new THREE.Box3().setFromObject(mesh);
 const size=box.getSize(new THREE.Vector3()).length();
@@ -247,10 +266,15 @@ camera.position.set(size,size,size);
 });
 
 
+
 function animate(){
+
 requestAnimationFrame(animate);
+
 controls.update();
+
 renderer.render(scene,camera);
+
 }
 
 animate();
