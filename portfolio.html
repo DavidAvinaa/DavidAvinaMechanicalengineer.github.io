@@ -118,7 +118,7 @@ border-radius:6px;
 <h2>Mechanical Engineer</h2>
 
 <p>
-Mechanical and Energy Systems Engineer with professional experience in structural steel fabrication, engineering coordination, and project execution. My work focuses on supervising manufacturing processes, managing installation planning, and ensuring quality control throughout complex engineering projects.
+Mechanical and Energy Systems Engineer with professional experience in structural steel fabrication, engineering coordination and project execution.
 </p>
 
 <h2>Project Management Experience</h2>
@@ -130,11 +130,11 @@ IMSS Clinic 25 Structural Steel Project
 <div class="project-content" id="p1">
 
 <p>
-Structural steel fabrication and installation project for hospital infrastructure at IMSS Clinic 25 including anchor bolt installation, steel assembly coordination and fire protection coatings.
+Structural steel fabrication and installation project for hospital infrastructure at IMSS Clinic 25.
 </p>
 
 <button class="sub-button" onclick="toggleSub('cronograma')">1. Cronograma</button>
-<div class="sub-content" id="cronograma">Project timeline documentation.</div>
+<div class="sub-content" id="cronograma">Project timeline.</div>
 
 <button class="sub-button" onclick="toggleSub('planos')">2. Planos</button>
 <div class="sub-content" id="planos">Engineering drawings.</div>
@@ -166,7 +166,7 @@ CORE-LOC Special Formwork System
 <div class="project-content" id="p2">
 
 <p>
-Engineering management of the fabrication process for patented CORE-LOC formwork systems used in coastal protection structures.
+Engineering management of the fabrication process for patented CORE-LOC formwork systems.
 </p>
 
 <div class="viewer" id="viewerCORE"></div>
@@ -182,7 +182,7 @@ Valle de Bravo Residential Steel Structure
 <div class="project-content" id="p3">
 
 <p>
-Project management of a residential structural steel installation located in Valle de Bravo including fabrication and installation planning.
+Residential structural steel installation project located in Valle de Bravo.
 </p>
 
 </div>
@@ -266,17 +266,19 @@ controls.enableDamping=true;
 
 
 
-scene.add(new THREE.AmbientLight(0xffffff,0.9));
+/* ILUMINACIÓN PROFESIONAL */
 
-const light1=new THREE.DirectionalLight(0xffffff,1.2);
+scene.add(new THREE.AmbientLight(0xffffff,1));
+
+const light1=new THREE.DirectionalLight(0xffffff,1.4);
 light1.position.set(400,500,400);
 scene.add(light1);
 
-const light2=new THREE.DirectionalLight(0xffffff,0.7);
+const light2=new THREE.DirectionalLight(0xffffff,1);
 light2.position.set(-400,200,300);
 scene.add(light2);
 
-const light3=new THREE.DirectionalLight(0xffffff,0.9);
+const light3=new THREE.DirectionalLight(0xffffff,1);
 light3.position.set(-300,400,-400);
 scene.add(light3);
 
@@ -290,15 +292,16 @@ geometry.center();
 
 const material=new THREE.MeshStandardMaterial({
 color:0x2f6df6,
-metalness:0.8,
-roughness:0.3
+metalness:0.85,
+roughness:0.35
 });
 
 const mesh=new THREE.Mesh(geometry,material);
 
 if(rotateHorizontal){
 
-mesh.rotation.x = Math.PI / 2;
+/* CORRECCIÓN DE ORIENTACIÓN */
+mesh.rotation.x = -Math.PI/2;
 
 }
 
@@ -306,11 +309,15 @@ scene.add(mesh);
 
 
 
+/* AUTOESCALA */
+
 const box=new THREE.Box3().setFromObject(mesh);
 const size=box.getSize(new THREE.Vector3()).length();
 
 const scale=220/size;
 mesh.scale.set(scale,scale,scale);
+
+
 
 camera.position.set(300,200,300);
 
@@ -321,6 +328,8 @@ controls.target.set(0,0,0);
 function animate(){
 
 requestAnimationFrame(animate);
+
+/* ROTACIÓN SOBRE Z */
 
 mesh.rotation.z += 0.002;
 
