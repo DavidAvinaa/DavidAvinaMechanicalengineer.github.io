@@ -118,10 +118,12 @@ border-radius:6px;
 <h2>Mechanical Engineer</h2>
 
 <p>
-Mechanical and Energy Systems Engineer with professional experience in structural steel fabrication and engineering coordination.
+Mechanical and Energy Systems Engineer with professional experience in structural steel fabrication, engineering coordination, and project execution.
 </p>
 
 <h2>Project Management Experience</h2>
+
+<!-- PROYECTO 1 -->
 
 <button class="project-button" onclick="toggleProject('p1')">
 IMSS Clinic 25 Structural Steel Project
@@ -129,21 +131,32 @@ IMSS Clinic 25 Structural Steel Project
 
 <div class="project-content" id="p1">
 
-<button class="sub-button" onclick="toggleSub('columna')">3. Columna</button>
+<button class="sub-button" onclick="toggleSub('cronograma')">1. Cronograma</button>
+<div class="sub-content" id="cronograma">Project timeline documentation.</div>
 
+<button class="sub-button" onclick="toggleSub('planos')">2. Planos</button>
+<div class="sub-content" id="planos">Engineering drawings.</div>
+
+<button class="sub-button" onclick="toggleSub('columna')">3. Columna</button>
 <div class="sub-content" id="columna">
 <div class="viewer" id="viewerIMSS"></div>
 </div>
 
 <button class="sub-button" onclick="toggleSub('campo')">4. Columna en Campo</button>
-
 <div class="sub-content" id="campo">
 <div class="viewer" id="viewerCampo"></div>
 </div>
 
+<button class="sub-button" onclick="toggleSub('calidad')">5. Control de Calidad</button>
+<div class="sub-content" id="calidad">Inspection procedures.</div>
+
+<button class="sub-button" onclick="toggleSub('fotos')">6. Fotos</button>
+<div class="sub-content" id="fotos">Project images.</div>
+
 </div>
 
 
+<!-- PROYECTO 2 -->
 
 <button class="project-button" onclick="toggleProject('p2')">
 CORE-LOC Special Formwork System
@@ -151,7 +164,26 @@ CORE-LOC Special Formwork System
 
 <div class="project-content" id="p2">
 
+<p>
+Engineering management of fabrication processes for patented CORE-LOC formwork systems used in coastal protection infrastructure.
+</p>
+
 <div class="viewer" id="viewerCORE"></div>
+
+</div>
+
+
+<!-- PROYECTO 3 -->
+
+<button class="project-button" onclick="toggleProject('p3')">
+Valle de Bravo Residential Steel Structure
+</button>
+
+<div class="project-content" id="p3">
+
+<p>
+Residential structural steel installation project located in Valle de Bravo including fabrication and installation coordination.
+</p>
 
 </div>
 
@@ -192,10 +224,10 @@ const section=document.getElementById(id);
 section.style.display =
 section.style.display==="block" ? "none" : "block";
 
-if(id==="columna" && !window.columnaLoaded){
+if(id==="columna" && !window.imssLoaded){
 
 loadSTL("viewerIMSS","./models/COLUMNAIMSS.stl");
-window.columnaLoaded=true;
+window.imssLoaded=true;
 
 }
 
@@ -269,27 +301,18 @@ loader.load(model,function(geometry){
 
 geometry.center();
 
-
-
 const material=new THREE.MeshStandardMaterial({
-
 color:0x2f6df6,
 metalness:0.9,
 roughness:0.3
-
 });
-
-
 
 const mesh=new THREE.Mesh(geometry,material);
 
 
-
-/* MISMA POSICIÓN QUE COLUMNA EN CAMPO */
+/* MISMA POSICIÓN */
 
 mesh.rotation.x = -Math.PI/2;
-
-
 
 scene.add(mesh);
 
@@ -307,8 +330,6 @@ mesh.scale.set(scale,scale,scale);
 
 camera.position.set(300,200,300);
 
-
-
 controls.target.set(0,0,0);
 
 
@@ -317,13 +338,9 @@ function animate(){
 
 requestAnimationFrame(animate);
 
-
-
-/* MISMA ROTACIÓN */
+/* ROTACIÓN */
 
 mesh.rotation.z += 0.002;
-
-
 
 controls.update();
 renderer.render(scene,camera);
