@@ -54,6 +54,23 @@ background:#162f80;
 transform:translateY(-2px);
 }
 
+.sub-button{
+width:100%;
+padding:14px;
+margin-top:10px;
+font-size:15px;
+background:#2f6df6;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+text-align:left;
+}
+
+.sub-button:hover{
+background:#1d4ed8;
+}
+
 .project-content{
 display:none;
 background:white;
@@ -61,6 +78,14 @@ padding:25px;
 margin-top:10px;
 border-radius:6px;
 box-shadow:0 10px 25px rgba(0,0,0,0.12);
+}
+
+.sub-content{
+display:none;
+margin-top:15px;
+padding:15px;
+background:#f7f9fc;
+border-radius:8px;
 }
 
 .viewer{
@@ -93,8 +118,7 @@ border-radius:6px;
 <h2>Mechanical Engineer</h2>
 
 <p>
-Mechanical and Energy Systems Engineer with experience in structural steel
-projects, fabrication supervision and engineering coordination.
+Mechanical and Energy Systems Engineer with professional experience in structural steel fabrication, engineering coordination, and project execution. My work focuses on supervising manufacturing processes, managing installation planning, and ensuring quality control throughout complex engineering projects. I have participated in projects involving structural assemblies, anchor bolt systems, and steel infrastructure installations for industrial and institutional facilities.
 </p>
 
 <h2>Project Management Experience</h2>
@@ -111,7 +135,53 @@ infrastructure at IMSS Clinic 25 including anchor bolt installation,
 steel assembly coordination and fire protection coatings.
 </p>
 
+<button class="sub-button" onclick="toggleSub('cronograma')">
+1. Cronograma
+</button>
+
+<div class="sub-content" id="cronograma">
+Project timeline and fabrication schedule documentation.
+</div>
+
+<button class="sub-button" onclick="toggleSub('planos')">
+2. Planos
+</button>
+
+<div class="sub-content" id="planos">
+Engineering drawings and fabrication plans.
+</div>
+
+<button class="sub-button" onclick="toggleSub('columna')">
+3. Columna
+</button>
+
+<div class="sub-content" id="columna">
 <div class="viewer" id="viewerIMSS"></div>
+</div>
+
+<button class="sub-button" onclick="toggleSub('campo')">
+4. Columna en Campo
+</button>
+
+<div class="sub-content" id="campo">
+Installation process of the structural column on site.
+</div>
+
+<button class="sub-button" onclick="toggleSub('calidad')">
+5. Control de Calidad
+</button>
+
+<div class="sub-content" id="calidad">
+Quality control documentation and inspection procedures.
+</div>
+
+<button class="sub-button" onclick="toggleSub('fotos')">
+6. Fotos
+</button>
+
+<div class="sub-content" id="fotos">
+Project progress photographs and installation records.
+</div>
 
 </div>
 
@@ -166,18 +236,21 @@ const section=document.getElementById(id);
 section.style.display =
 section.style.display==="block" ? "none" : "block";
 
+}
 
-if(id==="p1" && !window.imssLoaded){
+
+
+window.toggleSub=function(id){
+
+const section=document.getElementById(id);
+
+section.style.display =
+section.style.display==="block" ? "none" : "block";
+
+if(id==="columna" && !window.imssLoaded){
 
 loadSTL("viewerIMSS","./models/COLUMNAIMSS.stl");
 window.imssLoaded=true;
-
-}
-
-if(id==="p2" && !window.coreLoaded){
-
-loadSTL("viewerCORE","./models/CORE-LOC.stl");
-window.coreLoaded=true;
 
 }
 
@@ -189,16 +262,10 @@ function loadSTL(viewer,model){
 
 const container=document.getElementById(viewer);
 
-
-
-/* ESCENA */
-
 const scene=new THREE.Scene();
 scene.background=new THREE.Color(0xf4f7fb);
 
 
-
-/* CAMARA */
 
 const camera=new THREE.PerspectiveCamera(
 45,
@@ -209,25 +276,18 @@ container.clientWidth/container.clientHeight,
 
 
 
-/* RENDER */
-
 const renderer=new THREE.WebGLRenderer({antialias:true});
 renderer.setSize(container.clientWidth,container.clientHeight);
-
 renderer.shadowMap.enabled=true;
 
 container.appendChild(renderer.domElement);
 
 
 
-/* CONTROLES */
-
 const controls=new OrbitControls(camera,renderer.domElement);
 controls.enableDamping=true;
 
 
-
-/* LUCES PROFESIONALES */
 
 const ambient=new THREE.AmbientLight(0xffffff,0.7);
 scene.add(ambient);
@@ -247,13 +307,10 @@ scene.add(rim);
 
 
 
-/* PISO SOMBRA */
-
 const planeGeo=new THREE.PlaneGeometry(4000,4000);
 const planeMat=new THREE.ShadowMaterial({opacity:0.25});
 
 const plane=new THREE.Mesh(planeGeo,planeMat);
-
 plane.rotation.x=-Math.PI/2;
 plane.position.y=-50;
 plane.receiveShadow=true;
@@ -262,24 +319,16 @@ scene.add(plane);
 
 
 
-/* CARGAR STL */
-
 const loader=new STLLoader();
 
 loader.load(model,function(geometry){
 
 geometry.center();
 
-
-
-/* MATERIAL METALICO */
-
 const material=new THREE.MeshStandardMaterial({
-
 color:0x2f6df6,
 metalness:0.7,
 roughness:0.3
-
 });
 
 const mesh=new THREE.Mesh(geometry,material);
@@ -289,16 +338,8 @@ scene.add(mesh);
 
 
 
-/* AJUSTE AUTOMATICO DEL MODELO */
-
 const box=new THREE.Box3().setFromObject(mesh);
-
 const size=box.getSize(new THREE.Vector3()).length();
-const center=box.getCenter(new THREE.Vector3());
-
-
-
-/* ESCALAR AUTOMATICAMENTE */
 
 const scale=200/size;
 
@@ -306,17 +347,13 @@ mesh.scale.set(scale,scale,scale);
 
 
 
-/* POSICIONAR CAMARA */
-
 camera.position.set(250,180,250);
-camera.lookAt(center);
 
 controls.target.set(0,0,0);
+
 controls.update();
 
 
-
-/* ROTACION SUAVE */
 
 function animate(){
 
