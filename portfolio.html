@@ -130,9 +130,7 @@ IMSS Clinic 25 Structural Steel Project
 <div class="project-content" id="p1">
 
 <p>
-Structural steel fabrication and installation project for hospital
-infrastructure at IMSS Clinic 25 including anchor bolt installation,
-steel assembly coordination and fire protection coatings.
+Structural steel fabrication and installation project for hospital infrastructure at IMSS Clinic 25 including anchor bolt installation, steel assembly coordination and fire protection coatings.
 </p>
 
 <button class="sub-button" onclick="toggleSub('cronograma')">1. Cronograma</button>
@@ -168,8 +166,7 @@ CORE-LOC Special Formwork System
 <div class="project-content" id="p2">
 
 <p>
-Engineering management of the fabrication process for patented
-CORE-LOC formwork systems used in coastal protection structures.
+Engineering management of the fabrication process for patented CORE-LOC formwork systems used in coastal protection structures.
 </p>
 
 <div class="viewer" id="viewerCORE"></div>
@@ -185,8 +182,7 @@ Valle de Bravo Residential Steel Structure
 <div class="project-content" id="p3">
 
 <p>
-Project management of a residential structural steel installation
-located in Valle de Bravo including fabrication and installation planning.
+Project management of a residential structural steel installation located in Valle de Bravo including fabrication and installation planning.
 </p>
 
 </div>
@@ -230,14 +226,14 @@ section.style.display==="block" ? "none" : "block";
 
 if(id==="columna" && !window.imssLoaded){
 
-loadSTL("viewerIMSS","./models/COLUMNAIMSS.stl");
+loadSTL("viewerIMSS","./models/COLUMNAIMSS.stl",false);
 window.imssLoaded=true;
 
 }
 
 if(id==="campo" && !window.campoLoaded){
 
-loadSTL("viewerCampo","./models/ESTRUCTURAIMSS.stl");
+loadSTL("viewerCampo","./models/ESTRUCTURAIMSS.stl",true);
 window.campoLoaded=true;
 
 }
@@ -246,7 +242,7 @@ window.campoLoaded=true;
 
 
 
-function loadSTL(viewer,model){
+function loadSTL(viewer,model,rotateHorizontal=false){
 
 const container=document.getElementById(viewer);
 
@@ -270,21 +266,19 @@ controls.enableDamping=true;
 
 
 
-/* LUCES */
+scene.add(new THREE.AmbientLight(0xffffff,0.9));
 
-scene.add(new THREE.AmbientLight(0xffffff,0.8));
+const light1=new THREE.DirectionalLight(0xffffff,1.2);
+light1.position.set(400,500,400);
+scene.add(light1);
 
-const l1=new THREE.DirectionalLight(0xffffff,1.3);
-l1.position.set(400,500,400);
-scene.add(l1);
+const light2=new THREE.DirectionalLight(0xffffff,0.7);
+light2.position.set(-400,200,300);
+scene.add(light2);
 
-const l2=new THREE.DirectionalLight(0xffffff,0.6);
-l2.position.set(-400,200,300);
-scene.add(l2);
-
-const l3=new THREE.DirectionalLight(0xffffff,0.8);
-l3.position.set(-300,400,-400);
-scene.add(l3);
+const light3=new THREE.DirectionalLight(0xffffff,0.9);
+light3.position.set(-300,400,-400);
+scene.add(light3);
 
 
 
@@ -301,7 +295,16 @@ roughness:0.3
 });
 
 const mesh=new THREE.Mesh(geometry,material);
+
+if(rotateHorizontal){
+
+mesh.rotation.z=Math.PI/2;
+
+}
+
 scene.add(mesh);
+
+
 
 const box=new THREE.Box3().setFromObject(mesh);
 const size=box.getSize(new THREE.Vector3()).length();
@@ -310,7 +313,10 @@ const scale=220/size;
 mesh.scale.set(scale,scale,scale);
 
 camera.position.set(300,200,300);
+
 controls.target.set(0,0,0);
+
+
 
 function animate(){
 
