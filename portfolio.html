@@ -94,10 +94,12 @@ border-radius:6px;
 
 <p>
 Mechanical and Energy Systems Engineer with experience in structural steel
-projects, fabrication supervision and engineering coordination.
+fabrication projects and engineering coordination.
 </p>
 
 <h2>Project Management Experience</h2>
+
+
 
 <button class="project-button" onclick="toggleProject('p1')">
 IMSS Clinic 25 Structural Steel Project
@@ -142,7 +144,7 @@ Valle de Bravo Residential Steel Structure
 
 <p>
 Project management of a residential structural steel installation
-located in Valle de Bravo including fabrication and installation planning.
+located in Valle de Bravo.
 </p>
 
 </div>
@@ -166,17 +168,16 @@ const section=document.getElementById(id);
 section.style.display =
 section.style.display==="block" ? "none" : "block";
 
-
 if(id==="p1" && !window.imssLoaded){
 
-loadSTL("viewerIMSS","./models/COLUMNAIMSS.stl");
+loadSTL("viewerIMSS","./models/COLUMNAIMSS.stl",true);
 window.imssLoaded=true;
 
 }
 
 if(id==="p2" && !window.coreLoaded){
 
-loadSTL("viewerCORE","./models/CORE-LOC.stl");
+loadSTL("viewerCORE","./models/CORE-LOC.stl",false);
 window.coreLoaded=true;
 
 }
@@ -185,20 +186,16 @@ window.coreLoaded=true;
 
 
 
-function loadSTL(viewer,model){
+/* VISOR STL */
+
+function loadSTL(viewer,model,vertical=false){
 
 const container=document.getElementById(viewer);
-
-
-
-/* ESCENA */
 
 const scene=new THREE.Scene();
 scene.background=new THREE.Color(0xf4f7fb);
 
 
-
-/* CAMARA */
 
 const camera=new THREE.PerspectiveCamera(
 45,
@@ -209,8 +206,6 @@ container.clientWidth/container.clientHeight,
 
 
 
-/* RENDER */
-
 const renderer=new THREE.WebGLRenderer({antialias:true});
 renderer.setSize(container.clientWidth,container.clientHeight);
 
@@ -220,30 +215,28 @@ container.appendChild(renderer.domElement);
 
 
 
-/* CONTROLES */
-
 const controls=new OrbitControls(camera,renderer.domElement);
 controls.enableDamping=true;
 
 
 
-/* LUCES PROFESIONALES */
+/* LUCES */
 
 const ambient=new THREE.AmbientLight(0xffffff,0.7);
 scene.add(ambient);
 
-const light1=new THREE.DirectionalLight(0xffffff,1.2);
-light1.position.set(500,500,500);
-light1.castShadow=true;
-scene.add(light1);
+const keyLight=new THREE.DirectionalLight(0xffffff,1.2);
+keyLight.position.set(500,500,500);
+keyLight.castShadow=true;
+scene.add(keyLight);
 
-const light2=new THREE.DirectionalLight(0xffffff,0.6);
-light2.position.set(-500,200,300);
-scene.add(light2);
+const fillLight=new THREE.DirectionalLight(0xffffff,0.6);
+fillLight.position.set(-500,200,300);
+scene.add(fillLight);
 
-const rim=new THREE.DirectionalLight(0xffffff,0.8);
-rim.position.set(-200,300,-500);
-scene.add(rim);
+const rimLight=new THREE.DirectionalLight(0xffffff,0.8);
+rimLight.position.set(-200,300,-500);
+scene.add(rimLight);
 
 
 
@@ -256,6 +249,7 @@ const plane=new THREE.Mesh(planeGeo,planeMat);
 
 plane.rotation.x=-Math.PI/2;
 plane.position.y=-50;
+
 plane.receiveShadow=true;
 
 scene.add(plane);
@@ -272,8 +266,6 @@ geometry.center();
 
 
 
-/* MATERIAL METALICO */
-
 const material=new THREE.MeshStandardMaterial({
 
 color:0x2f6df6,
@@ -283,22 +275,34 @@ roughness:0.3
 });
 
 const mesh=new THREE.Mesh(geometry,material);
+
 mesh.castShadow=true;
+
+
+
+/* ROTAR PARA QUE QUEDE VERTICAL */
+
+if(vertical){
+
+mesh.rotation.x=Math.PI/2;
+
+}
+
+
 
 scene.add(mesh);
 
 
 
-/* AJUSTE AUTOMATICO DEL MODELO */
+/* CALCULAR TAMAÑO */
 
 const box=new THREE.Box3().setFromObject(mesh);
 
 const size=box.getSize(new THREE.Vector3()).length();
-const center=box.getCenter(new THREE.Vector3());
 
 
 
-/* ESCALAR AUTOMATICAMENTE */
+/* ESCALA AUTOMATICA */
 
 const scale=200/size;
 
@@ -306,17 +310,15 @@ mesh.scale.set(scale,scale,scale);
 
 
 
-/* POSICIONAR CAMARA */
+/* POSICION CAMARA */
 
-camera.position.set(250,180,250);
-camera.lookAt(center);
+camera.position.set(250,200,250);
 
 controls.target.set(0,0,0);
+
 controls.update();
 
 
-
-/* ROTACION SUAVE */
 
 function animate(){
 
