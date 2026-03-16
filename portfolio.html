@@ -208,7 +208,7 @@ section.style.display==="block" ? "none" : "block";
 
 if(id==="p2" && !window.coreLoaded){
 
-loadSTL("viewerCORE","./models/CORE-LOC.stl");
+loadSTL("viewerCORE","./models/CORE-LOC.stl",false);
 window.coreLoaded=true;
 
 }
@@ -298,7 +298,7 @@ const mesh=new THREE.Mesh(geometry,material);
 
 if(rotateHorizontal){
 
-mesh.rotation.z=Math.PI/2;
+mesh.rotation.x = Math.PI / 2;
 
 }
 
@@ -322,7 +322,7 @@ function animate(){
 
 requestAnimationFrame(animate);
 
-mesh.rotation.y+=0.002;
+mesh.rotation.y += 0.002;
 
 controls.update();
 renderer.render(scene,camera);
