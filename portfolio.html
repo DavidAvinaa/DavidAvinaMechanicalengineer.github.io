@@ -118,7 +118,7 @@ border-radius:6px;
 <h2>Mechanical Engineer</h2>
 
 <p>
-Mechanical and Energy Systems Engineer with professional experience in structural steel fabrication, engineering coordination and project execution.
+Mechanical and Energy Systems Engineer with professional experience in structural steel fabrication and engineering coordination.
 </p>
 
 <h2>Project Management Experience</h2>
@@ -129,31 +129,17 @@ IMSS Clinic 25 Structural Steel Project
 
 <div class="project-content" id="p1">
 
-<p>
-Structural steel fabrication and installation project for hospital infrastructure at IMSS Clinic 25.
-</p>
-
-<button class="sub-button" onclick="toggleSub('cronograma')">1. Cronograma</button>
-<div class="sub-content" id="cronograma">Project timeline.</div>
-
-<button class="sub-button" onclick="toggleSub('planos')">2. Planos</button>
-<div class="sub-content" id="planos">Engineering drawings.</div>
-
 <button class="sub-button" onclick="toggleSub('columna')">3. Columna</button>
+
 <div class="sub-content" id="columna">
 <div class="viewer" id="viewerIMSS"></div>
 </div>
 
 <button class="sub-button" onclick="toggleSub('campo')">4. Columna en Campo</button>
+
 <div class="sub-content" id="campo">
 <div class="viewer" id="viewerCampo"></div>
 </div>
-
-<button class="sub-button" onclick="toggleSub('calidad')">5. Control de Calidad</button>
-<div class="sub-content" id="calidad">Inspection procedures.</div>
-
-<button class="sub-button" onclick="toggleSub('fotos')">6. Fotos</button>
-<div class="sub-content" id="fotos">Project images.</div>
 
 </div>
 
@@ -165,25 +151,7 @@ CORE-LOC Special Formwork System
 
 <div class="project-content" id="p2">
 
-<p>
-Engineering management of the fabrication process for patented CORE-LOC formwork systems.
-</p>
-
 <div class="viewer" id="viewerCORE"></div>
-
-</div>
-
-
-
-<button class="project-button" onclick="toggleProject('p3')">
-Valle de Bravo Residential Steel Structure
-</button>
-
-<div class="project-content" id="p3">
-
-<p>
-Residential structural steel installation project located in Valle de Bravo.
-</p>
 
 </div>
 
@@ -208,7 +176,7 @@ section.style.display==="block" ? "none" : "block";
 
 if(id==="p2" && !window.coreLoaded){
 
-loadSTL("viewerCORE","./models/CORE-LOC.stl",false);
+loadSTL("viewerCORE","./models/CORE-LOC.stl");
 window.coreLoaded=true;
 
 }
@@ -224,16 +192,16 @@ const section=document.getElementById(id);
 section.style.display =
 section.style.display==="block" ? "none" : "block";
 
-if(id==="columna" && !window.imssLoaded){
+if(id==="columna" && !window.columnaLoaded){
 
-loadSTL("viewerIMSS","./models/COLUMNAIMSS.stl",false);
-window.imssLoaded=true;
+loadSTL("viewerIMSS","./models/COLUMNAIMSS.stl");
+window.columnaLoaded=true;
 
 }
 
 if(id==="campo" && !window.campoLoaded){
 
-loadSTL("viewerCampo","./models/ESTRUCTURAIMSS.stl",true);
+loadSTL("viewerCampo","./models/ESTRUCTURAIMSS.stl");
 window.campoLoaded=true;
 
 }
@@ -242,12 +210,14 @@ window.campoLoaded=true;
 
 
 
-function loadSTL(viewer,model,rotateHorizontal=false){
+function loadSTL(viewer,model){
 
 const container=document.getElementById(viewer);
 
 const scene=new THREE.Scene();
 scene.background=new THREE.Color(0xf4f7fb);
+
+
 
 const camera=new THREE.PerspectiveCamera(
 45,
@@ -256,31 +226,40 @@ container.clientWidth/container.clientHeight,
 10000
 );
 
+
+
 const renderer=new THREE.WebGLRenderer({antialias:true});
 renderer.setSize(container.clientWidth,container.clientHeight);
 
 container.appendChild(renderer.domElement);
+
+
 
 const controls=new OrbitControls(camera,renderer.domElement);
 controls.enableDamping=true;
 
 
 
-/* ILUMINACIÓN PROFESIONAL */
+/* ILUMINACIÓN MEJORADA */
 
-scene.add(new THREE.AmbientLight(0xffffff,1));
+const hemi=new THREE.HemisphereLight(0xffffff,0x444444,1.2);
+scene.add(hemi);
 
 const light1=new THREE.DirectionalLight(0xffffff,1.4);
-light1.position.set(400,500,400);
+light1.position.set(500,600,500);
 scene.add(light1);
 
-const light2=new THREE.DirectionalLight(0xffffff,1);
-light2.position.set(-400,200,300);
+const light2=new THREE.DirectionalLight(0xffffff,1.1);
+light2.position.set(-400,300,200);
 scene.add(light2);
 
 const light3=new THREE.DirectionalLight(0xffffff,1);
-light3.position.set(-300,400,-400);
+light3.position.set(200,500,-400);
 scene.add(light3);
+
+const light4=new THREE.DirectionalLight(0xffffff,0.8);
+light4.position.set(-200,-200,300);
+scene.add(light4);
 
 
 
@@ -290,20 +269,27 @@ loader.load(model,function(geometry){
 
 geometry.center();
 
+
+
 const material=new THREE.MeshStandardMaterial({
+
 color:0x2f6df6,
-metalness:0.85,
-roughness:0.35
+metalness:0.9,
+roughness:0.3
+
 });
+
+
 
 const mesh=new THREE.Mesh(geometry,material);
 
-if(rotateHorizontal){
 
-/* CORRECCIÓN DE ORIENTACIÓN */
+
+/* MISMA POSICIÓN QUE COLUMNA EN CAMPO */
+
 mesh.rotation.x = -Math.PI/2;
 
-}
+
 
 scene.add(mesh);
 
@@ -321,6 +307,8 @@ mesh.scale.set(scale,scale,scale);
 
 camera.position.set(300,200,300);
 
+
+
 controls.target.set(0,0,0);
 
 
@@ -329,9 +317,13 @@ function animate(){
 
 requestAnimationFrame(animate);
 
-/* ROTACIÓN SOBRE Z */
+
+
+/* MISMA ROTACIÓN */
 
 mesh.rotation.z += 0.002;
+
+
 
 controls.update();
 renderer.render(scene,camera);
