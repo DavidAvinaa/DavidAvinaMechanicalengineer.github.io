@@ -96,9 +96,10 @@ border-radius:12px;
 margin-top:20px;
 }
 
+/* 🔥 AJUSTE RESPONSIVO PARA PDF */
 iframe{
 width:100%;
-height:500px;
+height:80vh;
 border:none;
 margin-top:15px;
 border-radius:8px;
@@ -147,8 +148,9 @@ IMSS Clinic 25 Structural Steel Project
 
 <h3>IMSS Plans</h3>
 
-<iframe src="./pdfs/plano1.pdf"></iframe>
-<iframe src="./pdfs/plano2.pdf"></iframe>
+<!-- 🔥 SOLO CAMBIO: FIT A PANTALLA -->
+<iframe src="./pdfs/plano1.pdf#view=FitH"></iframe>
+<iframe src="./pdfs/plano2.pdf#view=FitH"></iframe>
 
 </div>
 
@@ -273,7 +275,7 @@ container.appendChild(renderer.domElement);
 const controls=new OrbitControls(camera,renderer.domElement);
 controls.enableDamping=true;
 
-/* ILUMINACIÓN */
+/* ILUMINACIÓN ORIGINAL */
 
 const hemi=new THREE.HemisphereLight(0xffffff,0x444444,1.2);
 scene.add(hemi);
