@@ -221,7 +221,7 @@ section.style.display==="block" ? "none" : "block";
 
 if(id==="p2" && !window.coreLoaded){
 
-loadSTL("viewerCORE","./models/coreloc.stl");
+loadSTL("viewerCORE","./models/CORE-LOC.stl");
 window.coreLoaded=true;
 
 }
@@ -237,7 +237,7 @@ section.style.display==="block" ? "none" : "block";
 
 if(id==="columna" && !window.imssLoaded){
 
-loadSTL("viewerIMSS","./models/columna.stl");
+loadSTL("viewerIMSS","./models/COLUMNAIMSS.stl");
 window.imssLoaded=true;
 
 }
@@ -259,7 +259,7 @@ const scene=new THREE.Scene();
 scene.background=new THREE.Color(0xf4f7fb);
 
 const camera=new THREE.PerspectiveCamera(
-60,
+45,
 container.clientWidth/container.clientHeight,
 0.1,
 10000
@@ -267,29 +267,32 @@ container.clientWidth/container.clientHeight,
 
 const renderer=new THREE.WebGLRenderer({antialias:true});
 renderer.setSize(container.clientWidth,container.clientHeight);
-renderer.shadowMap.enabled=true;
 
 container.appendChild(renderer.domElement);
 
 const controls=new OrbitControls(camera,renderer.domElement);
 controls.enableDamping=true;
 
-/* ILUMINACIÓN PRO */
+/* ILUMINACIÓN */
 
-const ambient=new THREE.AmbientLight(0xffffff,0.6);
-scene.add(ambient);
+const hemi=new THREE.HemisphereLight(0xffffff,0x444444,1.2);
+scene.add(hemi);
 
-const light1=new THREE.DirectionalLight(0xffffff,1.2);
-light1.position.set(300,400,300);
+const light1=new THREE.DirectionalLight(0xffffff,1.4);
+light1.position.set(500,600,500);
 scene.add(light1);
 
-const light2=new THREE.DirectionalLight(0xffffff,1);
-light2.position.set(-300,200,-300);
+const light2=new THREE.DirectionalLight(0xffffff,1.1);
+light2.position.set(-400,300,200);
 scene.add(light2);
 
-const light3=new THREE.PointLight(0xffffff,0.8);
-light3.position.set(0,300,0);
+const light3=new THREE.DirectionalLight(0xffffff,1);
+light3.position.set(200,500,-400);
 scene.add(light3);
+
+const light4=new THREE.DirectionalLight(0xffffff,0.8);
+light4.position.set(-200,-200,300);
+scene.add(light4);
 
 const loader=new STLLoader();
 
@@ -299,33 +302,34 @@ geometry.center();
 
 const material=new THREE.MeshStandardMaterial({
 color:0x2f6df6,
-metalness:0.6,
+metalness:0.9,
 roughness:0.3
 });
 
 const mesh=new THREE.Mesh(geometry,material);
 
-/* ORIENTACIÓN CORRECTA */
-mesh.rotation.x = Math.PI;
-
-/* AUTOESCALA */
-const box=new THREE.Box3().setFromObject(mesh);
-const size=new THREE.Vector3();
-box.getSize(size);
-
-const scale=200/Math.max(size.x,size.y,size.z);
-mesh.scale.set(scale,scale,scale);
+/* 🔥 TU CONFIG ORIGINAL */
+mesh.rotation.x = -Math.PI/2;
 
 scene.add(mesh);
 
-camera.position.set(0,120,250);
+const box=new THREE.Box3().setFromObject(mesh);
+const size=box.getSize(new THREE.Vector3()).length();
+const scale=220/size;
+mesh.scale.set(scale,scale,scale);
+
+camera.position.set(300,200,300);
 controls.target.set(0,0,0);
 
 function animate(){
+
 requestAnimationFrame(animate);
-mesh.rotation.z += 0.003;
+
+mesh.rotation.z += 0.002;
+
 controls.update();
 renderer.render(scene,camera);
+
 }
 
 animate();
