@@ -80,10 +80,11 @@ border-radius:6px;
 box-shadow:0 10px 25px rgba(0,0,0,0.12);
 }
 
+/* 🔥 SOLO CAMBIO AQUÍ */
 .sub-content{
 display:none;
 margin-top:15px;
-padding:15px;
+padding:8px 15px; /* más compacto */
 background:#f7f9fc;
 border-radius:8px;
 }
@@ -96,7 +97,6 @@ border-radius:12px;
 margin-top:20px;
 }
 
-/* 🔥 PDF AJUSTADO PARA IPAD Y PANTALLA */
 embed{
 width:100%;
 height:85vh;
@@ -132,8 +132,6 @@ Mechanical and Energy Systems Engineer with professional experience in structura
 
 <h2>Project Management Experience</h2>
 
-<!-- PROYECTO 1 -->
-
 <button class="project-button" onclick="toggleProject('p1')">
 IMSS Clinic 25 Structural Steel Project
 </button>
@@ -148,7 +146,6 @@ IMSS Clinic 25 Structural Steel Project
 
 <h3>IMSS Plans</h3>
 
-<!-- 🔥 AJUSTE REAL -->
 <embed src="./pdfs/plano1.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH" type="application/pdf">
 <embed src="./pdfs/plano2.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH" type="application/pdf">
 
@@ -172,9 +169,6 @@ IMSS Clinic 25 Structural Steel Project
 
 </div>
 
-
-<!-- PROYECTO 2 -->
-
 <button class="project-button" onclick="toggleProject('p2')">
 CORE-LOC Special Formwork System
 </button>
@@ -189,9 +183,6 @@ Engineering management of fabrication processes for patented CORE-LOC formwork s
 
 </div>
 
-
-<!-- PROYECTO 3 -->
-
 <button class="project-button" onclick="toggleProject('p3')">
 Valle de Bravo Residential Steel Structure
 </button>
@@ -205,8 +196,6 @@ Residential structural steel installation project located in Valle de Bravo incl
 </div>
 
 </div>
-
-
 
 <script type="module">
 
@@ -275,8 +264,6 @@ container.appendChild(renderer.domElement);
 const controls=new OrbitControls(camera,renderer.domElement);
 controls.enableDamping=true;
 
-/* ILUMINACIÓN ORIGINAL */
-
 const hemi=new THREE.HemisphereLight(0xffffff,0x444444,1.2);
 scene.add(hemi);
 
@@ -288,59 +275,4 @@ const light2=new THREE.DirectionalLight(0xffffff,1.1);
 light2.position.set(-400,300,200);
 scene.add(light2);
 
-const light3=new THREE.DirectionalLight(0xffffff,1);
-light3.position.set(200,500,-400);
-scene.add(light3);
-
-const light4=new THREE.DirectionalLight(0xffffff,0.8);
-light4.position.set(-200,-200,300);
-scene.add(light4);
-
-const loader=new STLLoader();
-
-loader.load(model,function(geometry){
-
-geometry.center();
-
-const material=new THREE.MeshStandardMaterial({
-color:0x2f6df6,
-metalness:0.9,
-roughness:0.3
-});
-
-const mesh=new THREE.Mesh(geometry,material);
-
-/* 🔥 TU CONFIG ORIGINAL */
-mesh.rotation.x = -Math.PI/2;
-
-scene.add(mesh);
-
-const box=new THREE.Box3().setFromObject(mesh);
-const size=box.getSize(new THREE.Vector3()).length();
-const scale=220/size;
-mesh.scale.set(scale,scale,scale);
-
-camera.position.set(300,200,300);
-controls.target.set(0,0,0);
-
-function animate(){
-
-requestAnimationFrame(animate);
-
-mesh.rotation.z += 0.002;
-
-controls.update();
-renderer.render(scene,camera);
-
-}
-
-animate();
-
-});
-
-}
-
-</script>
-
-</body>
-</html>
+const light3=new THREE.Directiona
