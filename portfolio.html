@@ -96,6 +96,14 @@ border-radius:12px;
 margin-top:20px;
 }
 
+iframe{
+width:100%;
+height:500px;
+border:none;
+margin-top:15px;
+border-radius:8px;
+}
+
 .back{
 text-decoration:none;
 color:white;
@@ -131,26 +139,33 @@ IMSS Clinic 25 Structural Steel Project
 
 <div class="project-content" id="p1">
 
-<button class="sub-button" onclick="toggleSub('cronograma')">1. Cronograma</button>
+<button class="sub-button" onclick="toggleSub('cronograma')">1. Schedule</button>
 <div class="sub-content" id="cronograma">Project timeline documentation.</div>
 
-<button class="sub-button" onclick="toggleSub('planos')">2. Planos</button>
-<div class="sub-content" id="planos">Engineering drawings.</div>
+<button class="sub-button" onclick="toggleSub('planos')">2. Plans</button>
+<div class="sub-content" id="planos">
 
-<button class="sub-button" onclick="toggleSub('columna')">3. Columna</button>
+<h3>IMSS Plans</h3>
+
+<iframe src="./pdfs/plano1.pdf"></iframe>
+<iframe src="./pdfs/plano2.pdf"></iframe>
+
+</div>
+
+<button class="sub-button" onclick="toggleSub('columna')">3. Column</button>
 <div class="sub-content" id="columna">
 <div class="viewer" id="viewerIMSS"></div>
 </div>
 
-<button class="sub-button" onclick="toggleSub('campo')">4. Columna en Campo</button>
+<button class="sub-button" onclick="toggleSub('campo')">4. Column on Site</button>
 <div class="sub-content" id="campo">
 <div class="viewer" id="viewerCampo"></div>
 </div>
 
-<button class="sub-button" onclick="toggleSub('calidad')">5. Control de Calidad</button>
+<button class="sub-button" onclick="toggleSub('calidad')">5. Quality Control</button>
 <div class="sub-content" id="calidad">Inspection procedures.</div>
 
-<button class="sub-button" onclick="toggleSub('fotos')">6. Fotos</button>
+<button class="sub-button" onclick="toggleSub('fotos')">6. Photos</button>
 <div class="sub-content" id="fotos">Project images.</div>
 
 </div>
@@ -197,8 +212,6 @@ import * as THREE from "three";
 import {OrbitControls} from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js";
 import {STLLoader} from "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/STLLoader.js";
 
-
-
 window.toggleProject=function(id){
 
 const section=document.getElementById(id);
@@ -208,14 +221,12 @@ section.style.display==="block" ? "none" : "block";
 
 if(id==="p2" && !window.coreLoaded){
 
-loadSTL("viewerCORE","./models/CORE-LOC.stl");
+loadSTL("viewerCORE","./models/coreloc.stl");
 window.coreLoaded=true;
 
 }
 
 }
-
-
 
 window.toggleSub=function(id){
 
@@ -226,7 +237,7 @@ section.style.display==="block" ? "none" : "block";
 
 if(id==="columna" && !window.imssLoaded){
 
-loadSTL("viewerIMSS","./models/COLUMNAIMSS.stl");
+loadSTL("viewerIMSS","./models/columna.stl");
 window.imssLoaded=true;
 
 }
@@ -240,8 +251,6 @@ window.campoLoaded=true;
 
 }
 
-
-
 function loadSTL(viewer,model){
 
 const container=document.getElementById(viewer);
@@ -249,51 +258,38 @@ const container=document.getElementById(viewer);
 const scene=new THREE.Scene();
 scene.background=new THREE.Color(0xf4f7fb);
 
-
-
 const camera=new THREE.PerspectiveCamera(
-45,
+60,
 container.clientWidth/container.clientHeight,
 0.1,
 10000
 );
 
-
-
 const renderer=new THREE.WebGLRenderer({antialias:true});
 renderer.setSize(container.clientWidth,container.clientHeight);
+renderer.shadowMap.enabled=true;
 
 container.appendChild(renderer.domElement);
-
-
 
 const controls=new OrbitControls(camera,renderer.domElement);
 controls.enableDamping=true;
 
+/* ILUMINACIÓN PRO */
 
+const ambient=new THREE.AmbientLight(0xffffff,0.6);
+scene.add(ambient);
 
-/* ILUMINACIÓN MEJORADA */
-
-const hemi=new THREE.HemisphereLight(0xffffff,0x444444,1.2);
-scene.add(hemi);
-
-const light1=new THREE.DirectionalLight(0xffffff,1.4);
-light1.position.set(500,600,500);
+const light1=new THREE.DirectionalLight(0xffffff,1.2);
+light1.position.set(300,400,300);
 scene.add(light1);
 
-const light2=new THREE.DirectionalLight(0xffffff,1.1);
-light2.position.set(-400,300,200);
+const light2=new THREE.DirectionalLight(0xffffff,1);
+light2.position.set(-300,200,-300);
 scene.add(light2);
 
-const light3=new THREE.DirectionalLight(0xffffff,1);
-light3.position.set(200,500,-400);
+const light3=new THREE.PointLight(0xffffff,0.8);
+light3.position.set(0,300,0);
 scene.add(light3);
-
-const light4=new THREE.DirectionalLight(0xffffff,0.8);
-light4.position.set(-200,-200,300);
-scene.add(light4);
-
-
 
 const loader=new STLLoader();
 
@@ -303,48 +299,33 @@ geometry.center();
 
 const material=new THREE.MeshStandardMaterial({
 color:0x2f6df6,
-metalness:0.9,
+metalness:0.6,
 roughness:0.3
 });
 
 const mesh=new THREE.Mesh(geometry,material);
 
+/* ORIENTACIÓN CORRECTA */
+mesh.rotation.x = Math.PI;
 
-/* MISMA POSICIÓN */
+/* AUTOESCALA */
+const box=new THREE.Box3().setFromObject(mesh);
+const size=new THREE.Vector3();
+box.getSize(size);
 
-mesh.rotation.x = -Math.PI/2;
+const scale=200/Math.max(size.x,size.y,size.z);
+mesh.scale.set(scale,scale,scale);
 
 scene.add(mesh);
 
-
-
-/* AUTOESCALA */
-
-const box=new THREE.Box3().setFromObject(mesh);
-const size=box.getSize(new THREE.Vector3()).length();
-
-const scale=220/size;
-mesh.scale.set(scale,scale,scale);
-
-
-
-camera.position.set(300,200,300);
-
+camera.position.set(0,120,250);
 controls.target.set(0,0,0);
 
-
-
 function animate(){
-
 requestAnimationFrame(animate);
-
-/* ROTACIÓN */
-
-mesh.rotation.z += 0.002;
-
+mesh.rotation.z += 0.003;
 controls.update();
 renderer.render(scene,camera);
-
 }
 
 animate();
