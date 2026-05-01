@@ -35,13 +35,12 @@ h1,h2{
 color:#1e3799;
 }
 
-/* Resumen ejecutivo (solo al inicio) */
 .resumen{
 background:white;
 padding:25px;
 border-radius:10px;
 box-shadow:0 10px 25px rgba(0,0,0,0.1);
-margin-bottom:25px;
+margin-bottom:16px;
 line-height:1.6;
 }
 
@@ -99,7 +98,10 @@ box-shadow:0 10px 25px rgba(0,0,0,0.12);
 
 .sub-content{
 display:none;
-margin-top:15px;padding:8px 15px;background:#f7f9fc;border-radius:8px;
+margin-top:15px;
+padding:8px 15px;
+background:#f7f9fc;
+border-radius:8px;
 }
 
 .viewer{
@@ -147,38 +149,26 @@ Mechanical and Energy Systems Engineer with professional experience in structura
 
 <h2>Project Management Experience</h2>
 
-<!-- 🔥 RESUMEN EJECUTIVO: SOLO AL INICIO -->
-<div class="resumen" id="resumen-inicio">
-<h3>Resumen ejecutivo</h3>
-
-<p><strong>Nombre del proyecto:</strong> Estructura metálica – IMSS clínica 25</p>
-<p><strong>Rol:</strong> Project Manager / Design Engineer</p>
-<p><strong>Duración:</strong> 5 meses</p>
-<p><strong>Alcance:</strong> Fabricación de estructura metálica</p>
-
-<p><strong>Resultado:</strong> Proyecto entregado en tiempo, 0 retrabajos críticos, cumplimiento normativo.</p>
-</div>
-
 <button class="project-button" onclick="toggleProject('p1')">
 IMSS Clinic 25 Structural Steel Project
 </button>
 
 <div class="project-content" id="p1">
 
-<!-- Resumen dentro del panel p1 (solo dentro del panel) -->
-<div class="resumen" style="margin-bottom:16px;">
+<div class="resumen">
 <h3>Resumen ejecutivo</h3>
 
 <p><strong>Nombre del proyecto:</strong> Estructura metálica – IMSS clínica 25</p>
 <p><strong>Rol:</strong> Project Manager / Design Engineer</p>
 <p><strong>Duración:</strong> 5 meses</p>
 <p><strong>Alcance:</strong> Fabricación de estructura metálica</p>
-
 <p><strong>Resultado:</strong> Proyecto entregado en tiempo, 0 retrabajos críticos, cumplimiento normativo.</p>
 </div>
 
 <button class="sub-button" onclick="toggleSub('cronograma')">1. Schedule</button>
-<div class="sub-content" id="cronograma">Project timeline documentation.</div>
+<div class="sub-content" id="cronograma">
+Project timeline documentation.
+</div>
 
 <button class="sub-button" onclick="toggleSub('planos')">2. Plans</button>
 <div class="sub-content" id="planos">
@@ -201,10 +191,14 @@ IMSS Clinic 25 Structural Steel Project
 </div>
 
 <button class="sub-button" onclick="toggleSub('calidad')">5. Quality Control</button>
-<div class="sub-content" id="calidad">Inspection procedures.</div>
+<div class="sub-content" id="calidad">
+Inspection procedures.
+</div>
 
 <button class="sub-button" onclick="toggleSub('fotos')">6. Photos</button>
-<div class="sub-content" id="fotos">Project images.</div>
+<div class="sub-content" id="fotos">
+Project images.
+</div>
 
 </div>
 
