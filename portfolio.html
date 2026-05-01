@@ -1,4 +1,4 @@
-[10:31 p.m., 30/4/2026] David: <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -35,63 +35,7 @@ h1,h2{
 color:#1e3799;
 }
 
-.project-button{
-width:100%;
-padding:18px;
-margin-top:15px;
-font-size:17px;
-background:#1e3799;
-color:white;
-border:none;
-border-radius:6px;
-cursor:pointer;
-text-align:left;
-transition:0.3s;
-
-/* 🔥 FIX CLICKS */
-position:relative;
-z-index:10;
-}
-
-.project-butt…
-[8:19 a.m., 1/5/2026] David: <!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Engineering Portfolio</title>
-
-<script type="importmap">
-{
-"imports":{
-"three":"https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js"
-}
-}
-</script>
-
-<style>
-
-body{
-margin:0;
-font-family:Arial;
-background:linear-gradient(180deg,#f5f7fb,#dfe6f2);
-color:#2c3e50;
-}
-
-.container{
-max-width:1000px;
-margin:auto;
-padding:60px 20px;
-}
-
-h1,h2{
-color:#1e3799;
-}
-
-/* 🔥 NUEVO BLOQUE RESUMEN */
+/* 🔥 NUEVO BLOQUE RESUMEN (se muestra al inicio) */
 .resumen{
 background:white;
 padding:25px;
@@ -118,7 +62,6 @@ border-radius:6px;
 cursor:pointer;
 text-align:left;
 transition:0.3s;
-
 position:relative;
 z-index:10;
 }
@@ -156,10 +99,7 @@ box-shadow:0 10px 25px rgba(0,0,0,0.12);
 
 .sub-content{
 display:none;
-margin-top:15px;
-padding:8px 15px;
-background:#f7f9fc;
-border-radius:8px;
+margin-top:15px;padding:8px 15px;background:#f7f9fc;border-radius:8px;
 }
 
 .viewer{
@@ -207,8 +147,8 @@ Mechanical and Energy Systems Engineer with professional experience in structura
 
 <h2>Project Management Experience</h2>
 
-<!-- 🔥 RESUMEN EJECUTIVO -->
-<div class="resumen">
+<!-- 🔥 RESUMEN EJECUTIVO: MANTENIDO AL INICIO -->
+<div class="resumen" id="resumen-inicio">
 <h3>Resumen ejecutivo</h3>
 
 <p><strong>Nombre del proyecto:</strong> Estructura metálica – IMSS clínica 25</p>
@@ -224,6 +164,18 @@ IMSS Clinic 25 Structural Steel Project
 </button>
 
 <div class="project-content" id="p1">
+
+<!-- Reutilizar el resumen al comienzo dentro del panel para que aparezca al hacer clic -->
+<div class="resumen" style="margin-bottom:16px;">
+<h3>Resumen ejecutivo</h3>
+
+<p><strong>Nombre del proyecto:</strong> Estructura metálica – IMSS clínica 25</p>
+<p><strong>Rol:</strong> Project Manager / Design Engineer</p>
+<p><strong>Duración:</strong> 5 meses</p>
+<p><strong>Alcance:</strong> Fabricación de estructura metálica</p>
+
+<p><strong>Resultado:</strong> Proyecto entregado en tiempo, 0 retrabajos críticos, cumplimiento normativo.</p>
+</div>
 
 <button class="sub-button" onclick="toggleSub('cronograma')">1. Schedule</button>
 <div class="sub-content" id="cronograma">Project timeline documentation.</div>
